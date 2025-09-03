@@ -25,12 +25,23 @@
 
 # define WIDTH 1600
 # define HEIGHT 1000
+# define X				50
+# define Y				50
 
-typedef struct s_mlx_data
-{
-    void	*mlx_ptr;
-    void	*win_ptr;
-}               t_mlx_data;
+// typedef struct s_img
+// {
+// 	void	*img_ptr;
+// 	char	*img_pixels_ptr;
+// 	int		bits_per_pixel;
+// 	int		endian;
+// 	int		line_len;
+// }				t_img;
 
+// typedef struct s_data
+// {
+//     void	*mlx;
+//     void	*win;
+// 	t_img	img;
+// }               t_data;
 
 #endif
