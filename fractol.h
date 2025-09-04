@@ -28,20 +28,21 @@
 # define X				50
 # define Y				50
 
-// typedef struct s_img
-// {
-// 	void	*img_ptr;
-// 	char	*img_pixels_ptr;
-// 	int		bits_per_pixel;
-// 	int		endian;
-// 	int		line_len;
-// }				t_img;
+typedef struct s_img
+{
+	void	*img_ptr;
+	char	*img_pixels_ptr;
+	int		bits_per_pixel;
+	int		endian;
+	int		line_len;
+}				t_img;
 
-// typedef struct s_data
-// {
-//     void	*mlx;
-//     void	*win;
-// 	t_img	img;
-// }               t_data;
+typedef struct s_data
+{
+    void	*mlx;
+    void	*win;
+	int		color;
+	t_img	img;
+}               t_data;
 
 #endif

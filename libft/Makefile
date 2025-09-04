@@ -13,7 +13,6 @@
 BLUE    =	\033[0;34m
 RESET   =	\033[0m 
 GREEN   =	\033[0;32m
-YELLOW  =	\033[1;33m
 
 # Compiler and flags
 CC      = cc
@@ -53,6 +52,7 @@ SRCS    =	ft_atoi.c\
 			ft_isdigit.c\
 			ft_putchar_fd.c\
 			ft_strjoin.c\
+			ft_strjoin_n.c\
 			ft_strtrim.c\
 			ft_isprint.c\
 			ft_putendl_fd.c\
@@ -68,11 +68,19 @@ SRCS    =	ft_atoi.c\
 			ft_lstiter.c\
 			ft_lstmap.c\
 			ft_atol.c\
+			ft_atof.c\
 			ft_strarr_free.c\
 			ft_strarr_len.c\
-			ft_strarr_join.c
+			ft_strarr_join.c\
 
-OBJS    = $(SRCS:.c=.o)
+# Define printf
+PRINTF_DIR 	= 	printf/
+PRINTF_SRCS	= 	$(PRINTF_DIR)ft_printf.c\
+
+
+ALL_SRCS 	= 	$(SRCS) $(PRINTF_SRCS)
+
+OBJS		= 	$(ALL_SRCS:.c=.o)
 
 #Test file
 TEST_SRC = .test.c
@@ -84,7 +92,7 @@ all: $(NAME)
 
 # Rule to build the library from object files
 $(NAME): $(OBJS)
-	@echo "$(YELLOW)[LIBFT]$(RESET) Creating static library..."
+	@echo "$(GREEN)[LIBFT]$(RESET) Creating static library..."
 	@ar rcs $(NAME) $(OBJS)
 
 # Rule to compile .c to .o
@@ -94,7 +102,8 @@ $(NAME): $(OBJS)
 
 # Rule to compile test
 test: $(TEST_OBJ) $(NAME)
-	$(CC) $(CFLAGS) $^ -o $(TEST_BIN) 
+	@echo "$(GREEN)[LIBFT]$(RESET) Ready For Testing..."
+	@$(CC) $(CFLAGS) $^ -o $(TEST_BIN) 
 
 # Clean object files
 clean:

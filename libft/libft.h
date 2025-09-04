@@ -14,6 +14,7 @@
 # define LIBFT_H
 # include <stddef.h>
 # include <stdlib.h>
+# include <stdio.h>
 # include <unistd.h>
 
 typedef struct s_list
@@ -46,6 +47,7 @@ char		*ft_strnstr(const char *haystack, const char *needle, size_t len);
 char		*ft_strdup(const char *s1);
 char		*ft_substr(char const *s, unsigned int start, size_t len);
 char		*ft_strjoin(char const *s1, char const *s2);
+char		*ft_strjoin_n(char **str_segs);
 char		*ft_strtrim(char const *s1, char const *set);
 char		**ft_split(char const *s, char c);
 char		*ft_itoa(int n);
@@ -67,6 +69,7 @@ void		ft_lstclear(t_list **lst, void (*del)(void*));
 void		ft_lstiter(t_list *lst, void (*f)(void *));
 t_list		*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 __int128_t	ft_atol(const char *str);
+double		ft_atof(const char *str);
 void		ft_strarr_free(char ***arr);
 int			ft_strarr_len(char **arr);
 char		**ft_strarr_join(char **arr1, char **arr2);
