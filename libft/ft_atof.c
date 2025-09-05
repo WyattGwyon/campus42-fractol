@@ -12,22 +12,13 @@
 
 #include "libft.h"
 
-struct s_float
-{
-	int				sign;
-	int				lnum;
-	int				rnum;
-	double			deci;
-	long long		zero;
-};
-
 static void	fraction(const char *str, struct s_float *f)
 {
 	str++;
 	while (ft_isdigit(*str))
 	{
 		f->rnum = f->rnum * 10 + (*str - '0');
-		f->zero = f->zero * 10;	
+		f->zero = f->zero * 10;
 		str++;
 	}
 	f->deci = (double)f->rnum / f->zero;
@@ -35,13 +26,13 @@ static void	fraction(const char *str, struct s_float *f)
 
 double	ft_atof(const char *str)
 {
-	struct s_float f;
+	struct s_float	f;
+
 	f.sign = 1;
 	f.lnum = 0;
 	f.rnum = 0;
 	f.deci = 0;
 	f.zero = 1;
-	
 	if (*str == '\0')
 		return (0);
 	while (*str == ' ' || (*str >= '\t' && *str <= '\r'))
@@ -54,7 +45,7 @@ double	ft_atof(const char *str)
 	}
 	while (ft_isdigit(*str))
 	{
-		f.lnum = f.lnum * 10 + (*str - '0');	
+		f.lnum = f.lnum * 10 + (*str - '0');
 		str++;
 	}
 	if (*str == '.' || *str == ',')

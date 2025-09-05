@@ -11,9 +11,6 @@
 /* ************************************************************************** */
 
 #include "fractol.h"
-#define	SIDE_LEN		800
-#define MALLOC_ERROR	1
-
 
 int     change_color(t_data *data)
 {
@@ -38,6 +35,10 @@ int     button_press(int button, int x, int y)
         printf("Left mouse button pressed at (%d, %d)!\n", x, y);
     else if (button == 3)
         printf("Right mouse button pressed at (%d, %d)!\n", x, y);
+	else if (button == 4)
+        printf("Zoom in scroll at (%d, %d)!\n", x, y);
+	else if (button == 5)
+        printf("Zoom out scroll at (%d, %d)!\n", x, y);
 
     return (0);
 }
@@ -144,7 +145,6 @@ int main(void)
 		free(data.mlx);
 		return (1);
 	}
-	// data.color = 0xFF0000;
 	data.img.img_ptr = mlx_new_image(data.mlx, WIDTH, HEIGHT);
 	data.img.img_pixels_ptr = mlx_get_data_addr(data.img.img_ptr, &data.img.bits_per_pixel, &data.img.line_len, &data.img.endian);
 	printf("Line_len %d <-> WIDTH%d HEIGHT%d\n"
