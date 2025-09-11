@@ -23,7 +23,10 @@ LIBMLX	=	./minilibx-linux
 LIBMLXA =	./minilibx-linux/libmlx.a
 NAME	=	fractol
 
-SRCS 	=	main.c
+SRCS 	=	main.c \
+			error_clean.c \
+			plot_image.c \
+			mandel.c
 
 OBJS	=	$(SRCS:%.c=%.o)
 
