@@ -14,7 +14,7 @@
 
 // add fractol formula and the iteration loop for mandel and julia
 
-double	mandel(int x)
+double	mandel(double x)
 {
-	return (x * x);
+	return (0.5 * (x * x));
 }

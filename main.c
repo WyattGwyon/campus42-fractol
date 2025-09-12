@@ -143,29 +143,63 @@ int	image_init(t_vars *vars)
 	return (0);
 }
 
+// int main(void)
+// {
+// 	t_vars vars;
+// 	t_fract fr;
+// 	t_map	map;
+
+// 	fr.color = 0xffffff;
+// 	if (image_init(&vars))
+// 		return (1);
+// 	printf("Line_len %d <-> WIDTH%d HEIGHT%d\n"
+// 			"bpp %d\n"
+// 			"endian %d\n", vars.img.line_len, WIDTH, HEIGHT, vars.img.bits_per_pixel, vars.img.endian);
+// 	mlx_hook(vars.win_ptr, ButtonPress, ButtonPressMask, &button_press, &vars);
+// 	mlx_hook(vars.win_ptr, DestroyNotify, 0, &cleanup, &vars);
+// 	plot_image(&fr, &map, &vars);
+// 	// set_xy_axis(&vars);
+// 	// mlx_loop_hook(vars.mlx_ptr, change_color, &vars);
+// 	// mlx_pixel_put(vars.mlx_ptr, vars.win, (WIDTH / 2), (HEIGHT / 2), 0xffffff);
+// 	mlx_key_hook(vars.win_ptr, f, &vars);
+// 	mlx_loop(vars.mlx_ptr);
+// 	// mlx_do_sync(vars.mlx_ptr);
+// 	// mlx_key_hook(vars.win, handle_input, &vars);
+// 	// mlx_destroy_window(vars.mlx_ptr, vars.win);
+// 	// mlx_destory_display(vars.mlx_ptr);
+// 	// free(vars.mlx_ptr);
+// }
+
+
 int main(void)
 {
-	t_vars vars;
-	t_fract fr;
-	// t_map	map;
+	t_complex 	z;
+	t_complex 	c;
+	int 		i;
+	double		tmp_real;
+	
+	z.real = 0;
+	z.i = 0;
 
-	fr.color = 0xffffff;
-	if (image_init(&vars))
-		return (1);
-	printf("Line_len %d <-> WIDTH%d HEIGHT%d\n"
-			"bpp %d\n"
-			"endian %d\n", vars.img.line_len, WIDTH, HEIGHT, vars.img.bits_per_pixel, vars.img.endian);
-	mlx_hook(vars.win_ptr, ButtonPress, ButtonPressMask, &button_press, &vars);
-	mlx_hook(vars.win_ptr, DestroyNotify, 0, &cleanup, &vars);
-	// plot_image(&fr, &map, &vars);
-	set_xy_axis(&vars);
-	// mlx_loop_hook(vars.mlx_ptr, change_color, &vars);
-	// mlx_pixel_put(vars.mlx_ptr, vars.win, (WIDTH / 2), (HEIGHT / 2), 0xffffff);
-	mlx_key_hook(vars.win_ptr, f, &vars);
-	mlx_loop(vars.mlx_ptr);
-	// mlx_do_sync(vars.mlx_ptr);
-	// mlx_key_hook(vars.win, handle_input, &vars);
-	// mlx_destroy_window(vars.mlx_ptr, vars.win);
-	// mlx_destory_display(vars.mlx_ptr);
-	// free(vars.mlx_ptr);
+	c.real = 0.25;
+	c.i = 0.4;
+
+	i = 0;
+	while (i < 42)
+	{
+		// z = z² + c
+		// First resolve z² which is made up of
+		// (Real + imaginary)
+		tmp_real = (z.real * z.real) - (z.i * z.i);
+		z.i = 2 * z.real * z.i;
+		z.real = tmp_real;
+
+		// Add z² to c
+		z.real += c.real;
+		z.i += c.i;
+
+		printf("iteration n -> %d real %f imaginary %f\n", i, z.real, z.i);
+		++i;
+	}
+
 }

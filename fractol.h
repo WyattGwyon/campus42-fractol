@@ -23,13 +23,31 @@
 # include <X11/X.h>
 # include <X11/keysym.h>
 
-# define WIDTH 						1600
-# define HEIGHT 					1000
-# define X							50
-# define Y							50
-// # define MLX_SYNC_IMAGE_WRITABLE 	1
-// # define MLX_SYNC_WIN_FLUSH_CMD		2
-// # define MLX_SYNC_WIN_CMD_COMPLETED	3
+# define WIDTH 						1000
+# define HEIGHT 					600
+
+// typedef void  (*t_operation)(t_map *map, t_fract *fr);
+
+// typedef enum
+// {
+//     OP_ZOOM,
+//     OP_SHIFT_HORZ,
+//     OP_SHIFT_VERT,
+//     OP_COUNT
+// } t_op_type;
+
+// t_operation operations[OP_COUNT] =
+// {
+// 	zoom,
+// 	horizontal_shift,
+// 	vertical_shift
+// };
+
+typedef struct s_complex
+{
+	double real;
+	double i;
+}	t_complex;
 
 typedef struct s_fract
 {
@@ -52,11 +70,6 @@ typedef struct s_map
 	int		y_foc;
 }  t_map;
 
-// typedef struct s_fractal
-// {
-
-// }
-
 typedef struct s_img
 {
 	void	*img_ptr;
@@ -77,8 +90,8 @@ typedef struct s_vars
 
 int 	cleanup(void *param);
 void	plot_image(t_fract *fr, t_map *map, t_vars *vars);
-double	mandel(int x);
+double	mandel(double x);
 void	put_pixel(t_img *img, int x, int y, int color);
-void	set_xy_axis(t_vars *vars);
+void	set_xy_axis(t_fract *fr, t_vars *vars);
 
 #endif
