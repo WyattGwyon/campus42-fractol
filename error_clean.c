@@ -25,3 +25,12 @@ int cleanup(void *param)
 		free(vars->mlx_ptr); 
 	exit(0);
 }
+
+void	clean_parser(t_parser **p)
+{
+	if ((*p)->strarr)
+		ft_strarr_free(&(*p)->strarr);
+	if ((*p)->intarr)
+		ft_floatarr_free(&(*p)->intarr);
+	ft_struct_free((void **)p);
+}

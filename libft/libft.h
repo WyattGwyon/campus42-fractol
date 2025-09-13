@@ -26,10 +26,11 @@ typedef struct s_list
 struct s_float
 {
 	int				sign;
-	int				lnum;
-	int				rnum;
+	long long		lnum;
+	long long		rnum;
 	double			deci;
 	long long		zero;
+	long long		e_num;
 };
 
 int			ft_atoi(const char*str);
@@ -82,5 +83,8 @@ double		ft_atof(const char *str);
 void		ft_strarr_free(char ***arr);
 int			ft_strarr_len(char **arr);
 char		**ft_strarr_join(char **arr1, char **arr2);
+void		ft_intarr_free(int **arr);
+void		ft_struct_free(void **ptr);
+void		ft_floatarr_free(double **arr);
 
 #endif

@@ -125,21 +125,37 @@ int	f(int keysym, t_vars *vars)
 		return 0;
 	}
 
-int	image_init(t_vars *vars)
+static void	malloc_error(void)
 {
+	perror("Problems with malloc");
+	exit(EXIT_FAILURE);	
+}
+
+int	image_init(t_vars *vars, char **argv)
+{
+	vars->name = argv[1];
 	vars->mlx_ptr = mlx_init();
 	if (!vars->mlx_ptr)
-		return (1);
-	vars->win_ptr = mlx_new_window(vars->mlx_ptr, WIDTH, HEIGHT, "MyWindow");
+		malloc_error();
+	vars->win_ptr = mlx_new_window(vars->mlx_ptr, WIDTH, HEIGHT, vars->name);
 	if (!vars->win_ptr)
 	{
 		mlx_destroy_display(vars->mlx_ptr);
-		free(vars->mlx_ptr);
-		return (1);
+		free(vars->mlx_ptr); 
+		malloc_error();
 	}
 	vars->img.img_ptr = mlx_new_image(vars->mlx_ptr, WIDTH, HEIGHT);
+	if (!vars->img.img_ptr)
+	{
+		mlx_destroy_window(vars->mlx_ptr, vars->win_ptr);
+		mlx_destroy_display(vars->mlx_ptr);
+		free(vars->mlx_ptr); 
+		malloc_error();
+	}
 	vars->img.pixel_data_addr = mlx_get_data_addr(vars->img.img_ptr, \
 		&vars->img.bits_per_pixel, &vars->img.line_len, &vars->img.endian);
+	// TODO events_init(vars)
+	// TODO data_init(vars)
 	return (0);
 }
 
@@ -171,35 +187,81 @@ int	image_init(t_vars *vars)
 // }
 
 
-int main(void)
-{
-	t_complex 	z;
-	t_complex 	c;
-	int 		i;
-	double		tmp_real;
+// int main(void)
+// {
+// 	t_complex 	z;
+// 	t_complex 	c;
+// 	int 		i;
+// 	double		tmp_real;
 	
-	z.real = 0;
-	z.i = 0;
+// 	z.real = 0;
+// 	z.i = 0;
 
-	c.real = 0.25;
-	c.i = 0.4;
+// 	c.real = 0.25;
+// 	c.i = 0.4;
 
-	i = 0;
-	while (i < 42)
+// 	i = 0;
+// 	while (i < 42)
+// 	{
+// 		// z = z² + c
+// 		// First resolve z² which is made up of
+// 		// (Real + imaginary)
+// 		tmp_real = (z.real * z.real) - (z.i * z.i);
+// 		z.i = 2 * z.real * z.i;
+// 		z.real = tmp_real;
+
+// 		// Add z² to c
+// 		z.real += c.real;
+// 		z.i += c.i;
+
+// 		printf("iteration n -> %d real %f imaginary %f\n", i, z.real, z.i);
+// 		++i;
+// 	}
+
+// }
+
+
+	
+
+int	main(int argc, char **argv)
+{
+	t_parser	*data;
+	t_vars		vars;
+
+	if (argc < 2)
+		return (ft_printf(
+			"fractol: usage: Please enter:\n\t\"%s mandelbrot\" or\n"
+			"\t\"%s julia <float_1> <float_2>\"\n", argv[0], argv[0]), 0);
+	if (argc == 2 && !ft_strncmp(argv[1], "mandelbrot", 10))
 	{
-		// z = z² + c
-		// First resolve z² which is made up of
-		// (Real + imaginary)
-		tmp_real = (z.real * z.real) - (z.i * z.i);
-		z.i = 2 * z.real * z.i;
-		z.real = tmp_real;
-
-		// Add z² to c
-		z.real += c.real;
-		z.i += c.i;
-
-		printf("iteration n -> %d real %f imaginary %f\n", i, z.real, z.i);
-		++i;
+		// TODO
+		if (image_init(&vars, argv))
+ 			return (1);
+		ft_printf("mandelbrot\n");
+		return (0);
 	}
-
+	data = parse_controller(argc, argv);
+	if (!data)
+		return (write(2, "Error\n", 6), 1);
+	if (!data->intarr)
+	{
+		ft_strarr_free(&data->strarr);
+		free(data);
+		return (write(2, "Error\n", 6), 1);
+	}
+	else if (data->len == 2 && !ft_strncmp(argv[1], "julia", 5))
+	{
+		// TODO
+		if (image_init(&vars, argv))
+ 			return (1);
+		ft_printf("julia\n");
+		printf("%f %f\n", data->intarr[0], data->intarr[1]);
+	}
+	else
+	{
+		clean_parser(&data);
+		return (ft_printf(
+			"fractol: usage: Please enter:\n\t\"%s mandelbrot\" or\n"
+			"\t\"%s julia <float_1> <float_2>\"\n", argv[0], argv[0]), 0);
+	}
 }

@@ -26,7 +26,8 @@ NAME	=	fractol
 SRCS 	=	main.c \
 			error_clean.c \
 			plot_image.c \
-			mandel.c
+			mandel.c \
+			parser.c
 
 OBJS	=	$(SRCS:%.c=%.o)
 

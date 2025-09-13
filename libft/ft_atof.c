@@ -12,6 +12,29 @@
 
 #include "libft.h"
 
+static void	float_init(struct s_float *f)
+{
+	f->sign = 1;
+	f->lnum = 0;
+	f->rnum = 0;
+	f->deci = 0;
+	f->zero = 1;
+	f->e_num = 1;
+}
+
+static void	scientific_notation(const char *str, struct s_float *f)
+{
+	long long	e_num;
+
+	str++;
+	e_num = ft_atol(str);
+	while (e_num > 0)
+	{
+		f->e_num *= 10;
+		--e_num;
+	}
+}
+
 static void	fraction(const char *str, struct s_float *f)
 {
 	str++;
@@ -21,18 +44,16 @@ static void	fraction(const char *str, struct s_float *f)
 		f->zero = f->zero * 10;
 		str++;
 	}
-	f->deci = (double)f->rnum / f->zero;
+	if (*str == 'e')
+		scientific_notation(str, f);
+	f->deci = ((double)f->rnum / f->zero);
 }
 
 double	ft_atof(const char *str)
 {
 	struct s_float	f;
 
-	f.sign = 1;
-	f.lnum = 0;
-	f.rnum = 0;
-	f.deci = 0;
-	f.zero = 1;
+	float_init(&f);
 	if (*str == '\0')
 		return (0);
 	while (*str == ' ' || (*str >= '\t' && *str <= '\r'))
@@ -50,5 +71,5 @@ double	ft_atof(const char *str)
 	}
 	if (*str == '.' || *str == ',')
 		fraction(str, &f);
-	return ((f.deci + f.lnum) * f.sign);
+	return (((f.deci + f.lnum) * f.sign) * f.e_num);
 }

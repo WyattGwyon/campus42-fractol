@@ -72,6 +72,9 @@ SRCS    =	ft_atoi.c\
 			ft_strarr_free.c\
 			ft_strarr_len.c\
 			ft_strarr_join.c\
+			ft_intarr_free.c \
+			ft_struct_free.c \
+			ft_floatarr_free.c
 
 # Define printf
 PRINTF_DIR 	= 	printf/
