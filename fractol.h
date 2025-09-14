@@ -25,8 +25,44 @@
 # include <stdbool.h>
 # include <limits.h>
 
-# define WIDTH 						1000
-# define HEIGHT 					600
+# define WIDTH 						800
+# define HEIGHT 					800
+
+#define BLACK 0x000000
+#define WHITE 0xFFFFFF
+#define RED   0xFF0000
+#define GREEN 0x00FF00
+#define BLUE  0x0000FF
+
+#define OCEAN_1 0x001f3f
+#define OCEAN_2 0x0074D9
+#define OCEAN_3 0x7FDBFF
+#define OCEAN_4 0x39CCCC
+#define OCEAN_5 0x3D9970
+
+#define FIRE_1 0x7f0000
+#define FIRE_2 0xff0000
+#define FIRE_3 0xff7f00
+#define FIRE_4 0xffff00
+#define FIRE_5 0xffffff
+
+#define SPACE_1 0x0b0033
+#define SPACE_2 0x301860
+#define SPACE_3 0x602080
+#define SPACE_4 0xa040a0
+#define SPACE_5 0xff80c0
+
+#define FOREST_1 0x003300
+#define FOREST_2 0x006600
+#define FOREST_3 0x339933
+#define FOREST_4 0x66cc66
+#define FOREST_5 0xccffcc
+
+#define RAINBOW_1 0xff0000
+#define RAINBOW_2 0xff7f00
+#define RAINBOW_3 0xffff00
+#define RAINBOW_4 0x00ff00
+#define RAINBOW_5 0x0000ff
 
 // typedef void  (*t_operation)(t_map *map, t_fract *fr);
 
@@ -60,17 +96,17 @@ typedef struct s_complex
 	double i;
 }	t_complex;
 
-typedef struct s_fract
+typedef struct s_graph
 {
 	double	x_coord;
 	double	y_coord;
 	int		max_iter;
 	int		color;
-	double	offset_x;
-	double	offset_y;
-}   t_fract;
+	double	escape_value;
+	int		iterations;
+}   t_graph;
 
-typedef struct s_map
+typedef struct s_pixel
 {
 	int		pix_per_unit;
 	float	pix_val;
@@ -79,7 +115,7 @@ typedef struct s_map
 	double	y_pix;
 	int		x_foc;
 	int		y_foc;
-}  t_map;
+}  t_pixel;
 
 typedef struct s_img
 {
@@ -94,10 +130,8 @@ typedef struct s_vars
 {
     void	*mlx_ptr;
     void	*win_ptr;
-	int		color;
 	char	*name;
 	t_img	img;
-	t_fract	fr;
 }               t_vars;
 
 // libft
@@ -115,10 +149,16 @@ void		clean_parser(t_parser **p);
 int 		cleanup(void *param);
 
 // fractol
-void		plot_image(t_fract *fr, t_map *map, t_vars *vars);
+void		plot_image(t_graph *fr, t_pixel *map, t_vars *vars);
 double		mandel(double x);
 void		put_pixel(t_img *img, int x, int y, int color);
-void		set_xy_axis(t_fract *fr, t_vars *vars);
+void		set_xy_axis(t_graph *fr, t_vars *vars);
 t_parser	*parse_controller(int argc, char *argv[]);
+double		map(double unscaled_num, double new_min, double new_max, double old_max);
+t_complex	sum_complex(t_complex z1, t_complex z2);
+t_complex	square_complex(t_complex z);
+void		fractal_render(t_graph *fr, t_pixel *map, t_vars *vars);
+void		init_pix_coord(t_graph *fr, t_pixel *map);
+
 
 #endif

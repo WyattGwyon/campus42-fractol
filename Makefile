@@ -27,7 +27,10 @@ SRCS 	=	main.c \
 			error_clean.c \
 			plot_image.c \
 			mandel.c \
-			parser.c
+			parser.c \
+			math_utils.c \
+			mandel.c
+
 
 OBJS	=	$(SRCS:%.c=%.o)
 

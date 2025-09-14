@@ -12,22 +12,22 @@
 
 #include "fractol.h"
 
-int     change_color(t_vars *vars)
-{
-    // Fill the window with the current color
-//  mlx_clear_window(data->mlx, data->win);
-    mlx_string_put(vars->mlx_ptr, vars->win_ptr, 150, 150, vars->color, "Color Changing Window!");
+// int     change_color(t_vars *vars)
+// {
+//     // Fill the window with the current color
+// //  mlx_clear_window(data->mlx, data->win);
+//     mlx_string_put(vars->mlx_ptr, vars->win_ptr, 150, 150, vars->color, "Color Changing Window!");
 
-    // Cycle through some basic colors: RED, GREEN, BLUE
-    if (vars->color == 0xFF0000)        // If it's red
-        vars->color = 0x00FF00;        // Change to green
-    else if (vars->color == 0x00FF00)   // If it's green
-        vars->color = 0x0000FF;        // Change to blue
-    else
-        vars->color = 0xFF0000;        // Otherwise, go back to red
+//     // Cycle through some basic colors: RED, GREEN, BLUE
+//     if (vars->color == 0xFF0000)        // If it's red
+//         vars->color = 0x00FF00;        // Change to green
+//     else if (vars->color == 0x00FF00)   // If it's green
+//         vars->color = 0x0000FF;        // Change to blue
+//     else
+//         vars->color = 0xFF0000;        // Otherwise, go back to red
 
-    return (0);
-}
+//     return (0);
+// }
 
 int     button_press(int button, int x, int y)
 {
@@ -58,16 +58,6 @@ int	handle_input(int keysym, t_vars *vars)
     }
     printf("The %d key has been pressed\n\n", keysym);
     return (0);
-}
-
-//Line len is in bytes. WIDTH 800 len_line ~3200 (can differ for alignment)
-void	put_pixel(t_img *img, int x, int y, int color)
-{
-	int	offset;
-
-	offset = (img->line_len * y) + (x * (img->bits_per_pixel / 8));	
-
-	*((unsigned int *)(offset + img->pixel_data_addr)) = color;
 }
 
 void	color_screen(t_vars *vars, int color)
@@ -131,7 +121,9 @@ static void	malloc_error(void)
 	exit(EXIT_FAILURE);	
 }
 
-int	image_init(t_vars *vars, char **argv)
+
+
+int	image_init(t_vars *vars, char **argv, t_graph *fr, t_pixel *map)
 {
 	vars->name = argv[1];
 	vars->mlx_ptr = mlx_init();
@@ -155,15 +147,15 @@ int	image_init(t_vars *vars, char **argv)
 	vars->img.pixel_data_addr = mlx_get_data_addr(vars->img.img_ptr, \
 		&vars->img.bits_per_pixel, &vars->img.line_len, &vars->img.endian);
 	// TODO events_init(vars)
-	// TODO data_init(vars)
+	init_pix_coord(fr, map);
 	return (0);
 }
 
 // int main(void)
 // {
 // 	t_vars vars;
-// 	t_fract fr;
-// 	t_map	map;
+// 	t_graph fr;
+// 	t_pixel	map;
 
 // 	fr.color = 0xffffff;
 // 	if (image_init(&vars))
@@ -227,6 +219,8 @@ int	main(int argc, char **argv)
 {
 	t_parser	*data;
 	t_vars		vars;
+	t_pixel		map;
+	t_graph		fr;
 
 	if (argc < 2)
 		return (ft_printf(
@@ -235,8 +229,11 @@ int	main(int argc, char **argv)
 	if (argc == 2 && !ft_strncmp(argv[1], "mandelbrot", 10))
 	{
 		// TODO
-		if (image_init(&vars, argv))
+		if (image_init(&vars, argv, &fr, &map))
  			return (1);
+		init_pix_coord(&fr, &map);
+		fractal_render(&fr, &map, &vars);
+		mlx_loop(vars.mlx_ptr);
 		ft_printf("mandelbrot\n");
 		return (0);
 	}
@@ -252,7 +249,7 @@ int	main(int argc, char **argv)
 	else if (data->len == 2 && !ft_strncmp(argv[1], "julia", 5))
 	{
 		// TODO
-		if (image_init(&vars, argv))
+		if (image_init(&vars, argv, &fr, &map))
  			return (1);
 		ft_printf("julia\n");
 		printf("%f %f\n", data->intarr[0], data->intarr[1]);
