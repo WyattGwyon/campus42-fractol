@@ -117,21 +117,35 @@ int	f(int keysym, t_ctx *ctx)
 	}
 	else if (keysym == XK_6)
 	{
-		ctx->fr.color_min = 0xff0000; // keep
-		ctx->fr.color_max = 0xff00ff; // keep
+		ctx->fr.color_min = 0x556699; // good
+		ctx->fr.color_max = 0x009999;
 		
 		fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
 	}
 	else if (keysym == XK_7)
 	{
-		ctx->fr.color_min = 0xffffff;
-		ctx->fr.color_max = 0x77ff77;
+		ctx->fr.color_min = 0xff0000; // keep
+		ctx->fr.color_max = 0xff00ff; // keep
+		
+		
 		fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
 	}
 	else if (keysym == XK_8)
 	{
 		ctx->fr.color_min = 0xff0000; // good
 		ctx->fr.color_max = 0x000000;
+		fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
+	}
+	else if (keysym == XK_9)
+	{
+		ctx->fr.color_min = 0x886666; // good
+		ctx->fr.color_max = 0x000000;
+		fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
+	}
+	else if (keysym == XK_0)
+	{
+		ctx->fr.color_min = 0xffffff;
+		ctx->fr.color_max = 0x77ff77;
 		fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
 	}
 	else if (keysym == XK_Escape)
