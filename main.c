@@ -79,93 +79,29 @@ void	color_screen(t_vars *vars, int color)
 
 int	f(int keysym, t_ctx *ctx)
 {
+	size_t	i;
+
+	i = 0;
 	printf("The %d key has been pressed\n\n", keysym);
-	if (keysym == XK_1)
-	{
-		ctx->fr.color_min = 0x00ff00;
-		ctx->fr.color_max = 0x000000; 
-		fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
-		
-	}
-	else if (keysym == XK_2)
-	{
-		ctx->fr.color_min = 0x0000ff;
-		ctx->fr.color_max = 0x000000;
-		
-		fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
-	}
-	else if (keysym == XK_3)
-	{
-		ctx->fr.color_min = 0xff0000; // good
-		ctx->fr.color_max = 0xfff900; // good
-		
-		fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
-	}
-	else if (keysym == XK_4)
-	{
-		ctx->fr.color_min = 0xff7f00; //keep
-		ctx->fr.color_max = 0xffffff; //keep
-		
-		fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
-	}
-	else if (keysym == XK_5)
-	{
-		ctx->fr.color_min = 0xffff00; //keep
-		ctx->fr.color_max = 0xff0000; //keep
-		
-		fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
-	}
-	else if (keysym == XK_6)
-	{
-		ctx->fr.color_min = 0x556699; // good
-		ctx->fr.color_max = 0x009999;
-		
-		fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
-	}
-	else if (keysym == XK_7)
-	{
-		ctx->fr.color_min = 0xff0000; // keep
-		ctx->fr.color_max = 0xff00ff; // keep
-		
-		
-		fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
-	}
-	else if (keysym == XK_8)
-	{
-		ctx->fr.color_min = 0xff0000; // good
-		ctx->fr.color_max = 0x000000;
-		fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
-	}
-	else if (keysym == XK_9)
-	{
-		ctx->fr.color_min = 0x886666; // good
-		ctx->fr.color_max = 0x000000;
-		fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
-	}
-	else if (keysym == XK_0)
-	{
-		ctx->fr.color_min = 0xffffff;
-		ctx->fr.color_max = 0x77ff77;
-		fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
-	}
-	else if (keysym == XK_Escape)
+	if (keysym == XK_Escape)
 	{
 		printf("The %d key (ESC) has been pressed\n\n", keysym);
 		cleanup((void *)&ctx->vars);
 	}
-	
-	// push the READY image to window
-	// the last parameters are the offset image-window
-	// mlx_put_image_to_window(vars->mlx_ptr,
-	// 						vars->win_ptr, 
-	// 						vars->img.img_ptr, 
-	// 						0, 0);
-
-	mlx_put_image_to_window(ctx->vars.mlx_ptr,
-							ctx->vars.win_ptr, 
-							ctx->vars.img.img_ptr, 
-							0, 0);
-		return 0;
+	while (i < sizeof(color_table)/sizeof(color_table[0]))
+	{
+		if (keysym == color_table[i].key)
+		{
+			ctx->fr.color_min = color_table[i].color_min;
+			ctx->fr.color_max = color_table[i].color_max;
+			fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
+			break;
+		}
+		i++;
+	}
+	mlx_put_image_to_window(ctx->vars.mlx_ptr, ctx->vars.win_ptr, 
+							ctx->vars.img.img_ptr, 0, 0);
+	return 0;
 	}
 
 static void	malloc_error(void)

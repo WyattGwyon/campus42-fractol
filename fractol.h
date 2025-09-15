@@ -81,6 +81,26 @@
 // 	vertical_shift
 // };
 
+typedef struct s_color_map
+{
+	int	key;
+	int	color_min;
+	int color_max;
+} t_color_map;
+
+static const t_color_map color_table[] = {
+    {XK_1, 0x00ff00, 0x000000},
+    {XK_2, 0x0000ff, 0x000000},
+    {XK_3, 0xff0000, 0xfff900},
+    {XK_4, 0xff7f00, 0xffffff},
+    {XK_5, 0xffff00, 0xff0000},
+    {XK_6, 0x556699, 0x009999},
+    {XK_7, 0xff0000, 0xff00ff},
+    {XK_8, 0xff0000, 0x000000},
+    {XK_9, 0x886666, 0x000000},
+    {XK_0, 0xffffff, 0x77ff77},
+};
+
 typedef struct s_parser
 {
 	char	**strarr;
