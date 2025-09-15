@@ -134,6 +134,13 @@ typedef struct s_vars
 	t_img	img;
 }               t_vars;
 
+typedef struct s_ctx
+{
+	t_vars	vars;
+	t_pixel	map;
+	t_graph	fr;
+}	t_ctx;
+
 // libft
 int			ft_printf(const char *fmt, ...);
 double		ft_atof(const char *str);

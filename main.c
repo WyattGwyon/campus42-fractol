@@ -221,19 +221,23 @@ int	main(int argc, char **argv)
 	t_vars		vars;
 	t_pixel		map;
 	t_graph		fr;
+	t_ctx		ctx;
 
 	if (argc < 2)
-		return (ft_printf(
-			"fractol: usage: Please enter:\n\t\"%s mandelbrot\" or\n"
-			"\t\"%s julia <float_1> <float_2>\"\n", argv[0], argv[0]), 0);
-	if (argc == 2 && !ft_strncmp(argv[1], "mandelbrot", 10))
-	{
-		// TODO
+	return (ft_printf(
+		"fractol: usage: Please enter:\n\t\"%s mandelbrot\" or\n"
+		"\t\"%s julia <float_1> <float_2>\"\n", argv[0], argv[0]), 0);
+		if (argc == 2 && !ft_strncmp(argv[1], "mandelbrot", 10))
+		{
+			// TODO
 		if (image_init(&vars, argv, &fr, &map))
- 			return (1);
-		init_pix_coord(&fr, &map);
-		fractal_render(&fr, &map, &vars);
-		mlx_loop(vars.mlx_ptr);
+			return (1);
+		ctx.vars = vars;
+		ctx.map = map;
+		ctx.fr = fr;
+		init_pix_coord(&ctx.fr, &ctx.map);
+		fractal_render(&ctx.fr, &ctx.map, &ctx.vars);
+		mlx_loop(ctx.vars.mlx_ptr);
 		ft_printf("mandelbrot\n");
 		return (0);
 	}
