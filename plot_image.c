@@ -26,6 +26,8 @@ void	init_pix_coord(t_graph *fr, t_pixel *map)
 	fr->y_coord = 0;
 	fr->escape_value = 4;
 	fr->iterations = 42;
+	fr->color_max = BLACK;
+	fr->color_min = WHITE;
 };
 
 double	map(double unscaled_num, double new_min, double new_max, double old_max)
@@ -82,7 +84,7 @@ void	handle_pixel(int x, int y, t_vars *vars, t_graph *fr)
 	t_complex	z;
 	t_complex	c;
 	int			i;
-
+	
 	i = 0;
 	z.real = 0.0;
 	z.i = 0.0;
@@ -93,13 +95,13 @@ void	handle_pixel(int x, int y, t_vars *vars, t_graph *fr)
 		z = sum_complex(square_complex(z), c);
 		if ((z.real * z.real) + (z.i * z.i) > fr->escape_value)
 		{
-			fr->color = map(i, BLACK, WHITE, fr->iterations);
+			fr->color = map(i, fr->color_max, fr->color_min, fr->iterations);
 			put_pixel(&vars->img, x, y, fr->color);
 			return ;
 		}
 		i++;
 	}
-	put_pixel(&vars->img, x, y, WHITE);
+	put_pixel(&vars->img, x, y, BLACK);
 }
 
 void	fractal_render(t_graph *fr, t_pixel *map, t_vars *vars)
@@ -116,20 +118,8 @@ void	fractal_render(t_graph *fr, t_pixel *map, t_vars *vars)
 	mlx_put_image_to_window(vars->mlx_ptr, vars->win_ptr, vars->img.img_ptr, 0, 0);
 };
 
-
-// void	handle_event(t_op_type type, t_pixel *map, t_graph *fr)
-// {
-// 	if (type < OP_COUNT)
-// 		operations[type](map, fr);
-// }
-
-
-// x [-2..0.5]
-// y [-1..1]
 void	plot_image(t_graph *fr, t_pixel *map, t_vars *vars)
 {
-
-	set_xy_axis(fr, vars);
 	init_pix_coord(fr, map);
 	while (map->y_pix < HEIGHT)
 	{

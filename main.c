@@ -77,40 +77,79 @@ void	color_screen(t_vars *vars, int color)
 
 
 
-int	f(int keysym, t_vars *vars)
+int	f(int keysym, t_ctx *ctx)
 {
 	printf("The %d key has been pressed\n\n", keysym);
-	if (keysym == XK_r)
+	if (keysym == XK_1)
 	{
-		color_screen(vars, 0x011616);
+		ctx->fr.color_min = 0x00ff00;
+		ctx->fr.color_max = 0x000000; 
+		fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
 		
 	}
-	else if (keysym == XK_g)
+	else if (keysym == XK_2)
 	{
-		color_screen(vars, 0x054b4c);
+		ctx->fr.color_min = 0x0000ff;
+		ctx->fr.color_max = 0x000000;
 		
+		fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
 	}
-	else if (keysym == XK_b)
+	else if (keysym == XK_3)
 	{
-		color_screen(vars, 0x0dbdbf);
+		ctx->fr.color_min = 0xff0000; // good
+		ctx->fr.color_max = 0xfff900; // good
 		
-	}	
+		fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
+	}
+	else if (keysym == XK_4)
+	{
+		ctx->fr.color_min = 0xff7f00; //keep
+		ctx->fr.color_max = 0xffffff; //keep
+		
+		fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
+	}
+	else if (keysym == XK_5)
+	{
+		ctx->fr.color_min = 0xffff00; //keep
+		ctx->fr.color_max = 0xff0000; //keep
+		
+		fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
+	}
+	else if (keysym == XK_6)
+	{
+		ctx->fr.color_min = 0xff0000; // keep
+		ctx->fr.color_max = 0xff00ff; // keep
+		
+		fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
+	}
+	else if (keysym == XK_7)
+	{
+		ctx->fr.color_min = 0xffffff;
+		ctx->fr.color_max = 0x77ff77;
+		fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
+	}
+	else if (keysym == XK_8)
+	{
+		ctx->fr.color_min = 0xff0000; // good
+		ctx->fr.color_max = 0x000000;
+		fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
+	}
 	else if (keysym == XK_Escape)
 	{
 		printf("The %d key (ESC) has been pressed\n\n", keysym);
-		cleanup((void *)vars);
+		cleanup((void *)&ctx->vars);
 	}
 	
 	// push the READY image to window
 	// the last parameters are the offset image-window
-	mlx_put_image_to_window(vars->mlx_ptr,
-							vars->win_ptr, 
-							vars->img.img_ptr, 
-							0, 0);
+	// mlx_put_image_to_window(vars->mlx_ptr,
+	// 						vars->win_ptr, 
+	// 						vars->img.img_ptr, 
+	// 						0, 0);
 
-	mlx_put_image_to_window(vars->mlx_ptr,
-							vars->win_ptr, 
-							vars->img.img_ptr, 
+	mlx_put_image_to_window(ctx->vars.mlx_ptr,
+							ctx->vars.win_ptr, 
+							ctx->vars.img.img_ptr, 
 							0, 0);
 		return 0;
 	}
@@ -218,9 +257,6 @@ int	image_init(t_vars *vars, char **argv, t_graph *fr, t_pixel *map)
 int	main(int argc, char **argv)
 {
 	t_parser	*data;
-	t_vars		vars;
-	t_pixel		map;
-	t_graph		fr;
 	t_ctx		ctx;
 
 	if (argc < 2)
@@ -230,13 +266,11 @@ int	main(int argc, char **argv)
 		if (argc == 2 && !ft_strncmp(argv[1], "mandelbrot", 10))
 		{
 			// TODO
-		if (image_init(&vars, argv, &fr, &map))
+		if (image_init(&ctx.vars, argv, &ctx.fr, &ctx.map))
 			return (1);
-		ctx.vars = vars;
-		ctx.map = map;
-		ctx.fr = fr;
 		init_pix_coord(&ctx.fr, &ctx.map);
 		fractal_render(&ctx.fr, &ctx.map, &ctx.vars);
+		mlx_key_hook(ctx.vars.win_ptr, f, &ctx.vars);
 		mlx_loop(ctx.vars.mlx_ptr);
 		ft_printf("mandelbrot\n");
 		return (0);
@@ -253,7 +287,7 @@ int	main(int argc, char **argv)
 	else if (data->len == 2 && !ft_strncmp(argv[1], "julia", 5))
 	{
 		// TODO
-		if (image_init(&vars, argv, &fr, &map))
+		if (image_init(&ctx.vars, argv, &ctx.fr, &ctx.map))
  			return (1);
 		ft_printf("julia\n");
 		printf("%f %f\n", data->intarr[0], data->intarr[1]);

@@ -102,6 +102,8 @@ typedef struct s_graph
 	double	y_coord;
 	int		max_iter;
 	int		color;
+	int		color_min;
+	int		color_max;
 	double	escape_value;
 	int		iterations;
 }   t_graph;
