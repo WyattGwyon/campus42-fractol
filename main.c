@@ -29,16 +29,37 @@
 //     return (0);
 // }
 
-int     button_press(int button, int x, int y)
+int     button_press(int button, int x, int y, t_ctx *ctx)
 {
     if (button == 1)
-        printf("Left mouse button pressed at (%d, %d)!\n", x, y);
+	{
+		printf("Left mouse button pressed at (%d, %d)!\n", x, y);
+
+	}
     else if (button == 3)
-        printf("Right mouse button pressed at (%d, %d)!\n", x, y);
+	{
+		
+		printf("Right mouse button pressed at (%d, %d)!\n", x, y);
+	}
 	else if (button == 4)
-        printf("Zoom in scroll at (%d, %d)!\n", x, y);
+	{
+		ctx->fr.min_x -= (((double)x / (double)WIDTH) * 0.1); 
+		ctx->fr.max_x -= ((((double)WIDTH - (double)x) / (double)WIDTH) * 0.1);
+		ctx->fr.min_y -= (((double)y / (double)HEIGHT) * 0.1); 
+		ctx->fr.max_y -= ((((double)HEIGHT - (double)y) / (double)HEIGHT) * 0.1); 
+		printf("x_max = %f x_min = %f\n", ctx->fr.max_x, ctx->fr.min_x);
+		printf("Zoom in scroll at (%d, %d)!\n", x, y);
+		fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
+	}
 	else if (button == 5)
-        printf("Zoom out scroll at (%d, %d)!\n", x, y);
+    {
+		ctx->fr.min_x += (((double)x / (double)WIDTH) * 0.1); 
+		ctx->fr.max_x += ((((double)WIDTH - (double)x) / (double)WIDTH) * 0.1);
+		ctx->fr.min_y += (((double)y / (double)HEIGHT) * 0.1); 
+		ctx->fr.max_y += ((((double)HEIGHT - (double)y) / (double)HEIGHT) * 0.1); 
+		printf("Zoom out scroll at (%d, %d)!\n", x, y);
+		fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
+	}
 
     return (0);
 }
@@ -75,9 +96,7 @@ void	color_screen(t_vars *vars, int color)
 	}
 }
 
-
-
-int	f(int keysym, t_ctx *ctx)
+int	color(int keysym, t_ctx *ctx)
 {
 	size_t	i;
 
@@ -99,46 +118,73 @@ int	f(int keysym, t_ctx *ctx)
 		}
 		i++;
 	}
+	
+	if (keysym == XK_Up)
+	{
+		ctx->fr.shift_y += 0.1;
+		fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
+	}
+	else if (keysym == XK_Down)
+	{
+		ctx->fr.shift_y += -0.1;
+		fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
+	}
+	else if (keysym == XK_Left)
+	{
+		ctx->fr.shift_x += 0.1;
+		fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
+	}
+	else if (keysym == XK_Right)
+	{
+		ctx->fr.shift_x += -0.1;
+		fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
+	}
+	else if (keysym == XK_l)
+	{
+		ctx->fr.iterations -= 5;
+		fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
+		ft_printf("Iterations Set To: %d\n",ctx->fr.iterations);
+	}
+	else if (keysym == XK_h)
+	{
+		ctx->fr.iterations += 5;
+		fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
+		ft_printf("Iterations Set To: %d\n",ctx->fr.iterations);
+	}
+	else if (keysym == XK_r)
+	{
+		init_pix_coord(&ctx->fr,&ctx->map);
+		fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
+	}
+
+	return 0;
+}
+
+int motions(int keysym, t_ctx *ctx)
+{
+	size_t	i;
+
+	i = 0;
+	printf("The %d key has been pressed\n\n", keysym);
+	if (keysym == Button4)
+	{
+		ctx->fr.color_min = 0x006600;
+		ctx->fr.color_max = 0x339933;
+		fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
+	}
+	else if (keysym == Button5)
+	{
+		ctx->fr.color_min = 0x301860;
+		ctx->fr.color_max = 0x602080;
+		fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
+	}
+			
 	mlx_put_image_to_window(ctx->vars.mlx_ptr, ctx->vars.win_ptr, 
 							ctx->vars.img.img_ptr, 0, 0);
 	return 0;
-	}
-
-static void	malloc_error(void)
-{
-	perror("Problems with malloc");
-	exit(EXIT_FAILURE);	
 }
 
 
-
-int	image_init(t_vars *vars, char **argv, t_graph *fr, t_pixel *map)
-{
-	vars->name = argv[1];
-	vars->mlx_ptr = mlx_init();
-	if (!vars->mlx_ptr)
-		malloc_error();
-	vars->win_ptr = mlx_new_window(vars->mlx_ptr, WIDTH, HEIGHT, vars->name);
-	if (!vars->win_ptr)
-	{
-		mlx_destroy_display(vars->mlx_ptr);
-		free(vars->mlx_ptr); 
-		malloc_error();
-	}
-	vars->img.img_ptr = mlx_new_image(vars->mlx_ptr, WIDTH, HEIGHT);
-	if (!vars->img.img_ptr)
-	{
-		mlx_destroy_window(vars->mlx_ptr, vars->win_ptr);
-		mlx_destroy_display(vars->mlx_ptr);
-		free(vars->mlx_ptr); 
-		malloc_error();
-	}
-	vars->img.pixel_data_addr = mlx_get_data_addr(vars->img.img_ptr, \
-		&vars->img.bits_per_pixel, &vars->img.line_len, &vars->img.endian);
-	// TODO events_init(vars)
-	init_pix_coord(fr, map);
-	return (0);
-}
 
 // int main(void)
 // {
@@ -201,9 +247,6 @@ int	image_init(t_vars *vars, char **argv, t_graph *fr, t_pixel *map)
 
 // }
 
-
-	
-
 int	main(int argc, char **argv)
 {
 	t_parser	*data;
@@ -220,7 +263,10 @@ int	main(int argc, char **argv)
 			return (1);
 		init_pix_coord(&ctx.fr, &ctx.map);
 		fractal_render(&ctx.fr, &ctx.map, &ctx.vars);
-		mlx_key_hook(ctx.vars.win_ptr, f, &ctx.vars);
+		mlx_hook(ctx.vars.win_ptr, KeyPress, KeyPressMask, color, &ctx.vars);
+		mlx_hook(ctx.vars.win_ptr, ButtonPress, ButtonPressMask, &button_press, &ctx);
+		// mlx_mouse_hook(ctx.vars.win_ptr, motions, &ctx.vars);
+		mlx_hook(ctx.vars.win_ptr, DestroyNotify, 0, &cleanup, &ctx.vars);
 		mlx_loop(ctx.vars.mlx_ptr);
 		ft_printf("mandelbrot\n");
 		return (0);

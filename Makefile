@@ -29,7 +29,8 @@ SRCS 	=	main.c \
 			mandel.c \
 			parser.c \
 			math_utils.c \
-			mandel.c
+			mandel.c \
+			init.c
 
 
 OBJS	=	$(SRCS:%.c=%.o)

@@ -12,6 +12,12 @@
 
 #include "fractol.h"
 
+void	malloc_error(void)
+{
+	perror("Problems with malloc");
+	exit(EXIT_FAILURE);	
+}
+
 int cleanup(void *param)
 {
 	t_vars *vars= (t_vars *)param;

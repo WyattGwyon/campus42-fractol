@@ -12,32 +12,27 @@
 
 #include "fractol.h"
 
-
 void	init_pix_coord(t_graph *fr, t_pixel *map)
 {
 	map->x_pix = 0;
 	map->y_pix = 0;
-	map->pix_per_unit = 10 ;
+	map->pix_per_unit = 200;
 	map->pix_val = map->pix_per_unit / 100;
 	map->x_foc = (WIDTH / 3) * 2;
 	map->y_foc = HEIGHT / 2;
 	fr->x_coord = 0;
 	fr->y_coord = 0;
-	fr->escape_value = 4;
+	fr->escape_value = 10;
 	fr->iterations = 42;
-}
-
-void	init_ctx(t_ctx *ctx)
-{
-	t_vars		vars;
-	t_pixel		map;
-	t_graph		fr;
-
-	init_pix_coord(ctx->fr, ctx->map);
-	ctx->vars = &vars;
-	ctx->map = &map;
-	ctx->fr = &fr;
-}
+	fr->color_max = BLACK;
+	fr->color_min = WHITE;
+	fr->shift_x = 0;
+	fr->shift_y = 0;
+	fr->max_x = 1.5;
+	fr->min_x = -2.5;
+	fr->max_y = 1.5;
+	fr->min_y = -1.5;
+};
 
 int	image_init(t_vars *vars, char **argv, t_graph *fr, t_pixel *map)
 {

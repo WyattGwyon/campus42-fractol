@@ -26,7 +26,7 @@
 # include <limits.h>
 
 # define WIDTH 						800
-# define HEIGHT 					800
+# define HEIGHT 					600
 
 #define BLACK 0x000000
 #define WHITE 0xFFFFFF
@@ -96,7 +96,7 @@ static const t_color_map color_table[] = {
     {XK_5, 0xffff00, 0xff0000},
     {XK_6, 0x556699, 0x009999},
     {XK_7, 0xff0000, 0xff00ff},
-    {XK_8, 0xff0000, 0x000000},
+    {XK_8, 0x001f3f, 0x0074D9},
     {XK_9, 0x886666, 0x000000},
     {XK_0, 0xffffff, 0x77ff77},
 };
@@ -120,6 +120,12 @@ typedef struct s_graph
 {
 	double	x_coord;
 	double	y_coord;
+	double	max_x;
+	double	min_x;
+	double	max_y;
+	double	min_y;
+	double	shift_x;
+	double	shift_y;
 	int		max_iter;
 	int		color;
 	int		color_min;
@@ -176,6 +182,10 @@ void		ft_floatarr_free(double **arr);
 // error & cleanup
 void		clean_parser(t_parser **p);
 int 		cleanup(void *param);
+void		malloc_error(void);
+
+// init
+int			image_init(t_vars *vars, char **argv, t_graph *fr, t_pixel *map);
 
 // fractol
 void		plot_image(t_graph *fr, t_pixel *map, t_vars *vars);
@@ -188,6 +198,9 @@ t_complex	sum_complex(t_complex z1, t_complex z2);
 t_complex	square_complex(t_complex z);
 void		fractal_render(t_graph *fr, t_pixel *map, t_vars *vars);
 void		init_pix_coord(t_graph *fr, t_pixel *map);
+int			motions(int keysym, t_ctx *ctx);
+int			color(int keysym, t_ctx *ctx);
+int			motions(int keysym, t_ctx *ctx);
 
 
 #endif
