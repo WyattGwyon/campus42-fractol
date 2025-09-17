@@ -116,8 +116,19 @@ typedef struct s_complex
 	double i;
 }	t_complex;
 
+typedef struct s_newton
+{
+	t_complex	z2;
+	t_complex	z3;
+	t_complex	fz;
+	t_complex	dfz;
+	t_complex	fract;
+	t_complex	result;
+}	t_newton;
+
 typedef struct s_graph
 {
+	char	*name;
 	double	x_coord;
 	double	y_coord;
 	double	max_x;
@@ -127,11 +138,14 @@ typedef struct s_graph
 	double	shift_x;
 	double	shift_y;
 	int		max_iter;
+	double	zoom;
 	int		color;
 	int		color_min;
 	int		color_max;
 	double	escape_value;
 	int		iterations;
+	double	julia_x;
+	double	julia_y;
 }   t_graph;
 
 typedef struct s_pixel
@@ -158,7 +172,6 @@ typedef struct s_vars
 {
     void	*mlx_ptr;
     void	*win_ptr;
-	char	*name;
 	t_img	img;
 }               t_vars;
 
@@ -201,6 +214,7 @@ void		init_pix_coord(t_graph *fr, t_pixel *map);
 int			motions(int keysym, t_ctx *ctx);
 int			color(int keysym, t_ctx *ctx);
 int			motions(int keysym, t_ctx *ctx);
-
+void		handle_pixel_newton(int x, int y, t_img *img, t_graph *fr);
+void		newton_render(t_graph *fr, t_pixel *map, t_vars *vars);
 
 #endif

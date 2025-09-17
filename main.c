@@ -29,6 +29,56 @@
 //     return (0);
 // }
 
+void	zoom_in(t_ctx *ctx, double zoom, int x_pix, int y_pix)
+{
+	double	x_zoom;
+	double	y_zoom;
+	double	x_len;
+	double	y_len;
+	double	to_x_min_pix;
+	double	to_x_max_pix;
+	double	to_y_min_pix;
+	double	to_y_max_pix;
+
+	x_len = ctx->fr.max_x - ctx->fr.min_x;
+	y_len = ctx->fr.max_y - ctx->fr.min_y;
+	x_zoom = x_len * zoom;
+	y_zoom = y_len * zoom;
+	to_x_min_pix = (double)x_pix / (double)WIDTH;
+	to_x_max_pix = ((double)WIDTH - (double)x_pix) / (double)WIDTH;
+	to_y_min_pix = (double)y_pix / (double)HEIGHT;
+	to_y_max_pix = ((double)HEIGHT - (double)y_pix) / (double)HEIGHT;
+	ctx->fr.min_x += x_zoom * (double)to_x_min_pix;
+	ctx->fr.max_x -= x_zoom * (double)to_x_max_pix;
+	ctx->fr.min_y += y_zoom * (double)to_y_min_pix;
+	ctx->fr.max_y -= y_zoom * (double)to_y_max_pix;
+}
+
+void	zoom_out(t_ctx *ctx, double zoom, int x_pix, int y_pix)
+{
+	double	x_zoom;
+	double	y_zoom;
+	double	x_len;
+	double	y_len;
+	double	to_x_min_pix;
+	double	to_x_max_pix;
+	double	to_y_min_pix;
+	double	to_y_max_pix;
+
+	x_len = ctx->fr.max_x - ctx->fr.min_x;
+	y_len = ctx->fr.max_y - ctx->fr.min_y;
+	x_zoom = x_len * zoom;
+	y_zoom = y_len * zoom;
+	to_x_min_pix = (double)x_pix / (double)WIDTH;
+	to_x_max_pix = ((double)WIDTH - (double)x_pix) / (double)WIDTH;
+	to_y_min_pix = (double)y_pix / (double)HEIGHT;
+	to_y_max_pix = ((double)HEIGHT - (double)y_pix) / (double)HEIGHT;
+	ctx->fr.min_x -= x_zoom * (double)to_x_min_pix;
+	ctx->fr.max_x += x_zoom * (double)to_x_max_pix;
+	ctx->fr.min_y -= y_zoom * (double)to_y_min_pix;
+	ctx->fr.max_y += y_zoom * (double)to_y_max_pix;
+}
+
 int     button_press(int button, int x, int y, t_ctx *ctx)
 {
     if (button == 1)
@@ -43,20 +93,16 @@ int     button_press(int button, int x, int y, t_ctx *ctx)
 	}
 	else if (button == 4)
 	{
-		ctx->fr.min_x -= (((double)x / (double)WIDTH) * 0.1); 
-		ctx->fr.max_x -= ((((double)WIDTH - (double)x) / (double)WIDTH) * 0.1);
-		ctx->fr.min_y -= (((double)y / (double)HEIGHT) * 0.1); 
-		ctx->fr.max_y -= ((((double)HEIGHT - (double)y) / (double)HEIGHT) * 0.1); 
+		ctx->fr.iterations += 4;
+		zoom_in(ctx, 0.40, x, y);
 		printf("x_max = %f x_min = %f\n", ctx->fr.max_x, ctx->fr.min_x);
 		printf("Zoom in scroll at (%d, %d)!\n", x, y);
 		fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
 	}
 	else if (button == 5)
     {
-		ctx->fr.min_x += (((double)x / (double)WIDTH) * 0.1); 
-		ctx->fr.max_x += ((((double)WIDTH - (double)x) / (double)WIDTH) * 0.1);
-		ctx->fr.min_y += (((double)y / (double)HEIGHT) * 0.1); 
-		ctx->fr.max_y += ((((double)HEIGHT - (double)y) / (double)HEIGHT) * 0.1); 
+		ctx->fr.iterations -= 2;
+		zoom_out(ctx, 0.20, x, y);
 		printf("Zoom out scroll at (%d, %d)!\n", x, y);
 		fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
 	}
@@ -66,9 +112,6 @@ int     button_press(int button, int x, int y, t_ctx *ctx)
 
 int	handle_input(int keysym, t_vars *vars)
 {
-    //Check the #defines
-    //find / -name keysym.h 2>/dev/null
-    //find / -name keysymdef.h 2>/dev/null
     if (keysym == XK_Escape)
     {
         printf("The %d key (ESC) has been pressed\n\n", keysym);
@@ -121,22 +164,22 @@ int	color(int keysym, t_ctx *ctx)
 	
 	if (keysym == XK_Up)
 	{
-		ctx->fr.shift_y += 0.1;
+		ctx->fr.shift_y += (ctx->fr.max_y - ctx->fr.min_y) * -0.1;
 		fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
 	}
 	else if (keysym == XK_Down)
 	{
-		ctx->fr.shift_y += -0.1;
+		ctx->fr.shift_y += (ctx->fr.max_y - ctx->fr.min_y) * 0.1;;
 		fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
 	}
 	else if (keysym == XK_Left)
 	{
-		ctx->fr.shift_x += 0.1;
+		ctx->fr.shift_x += (ctx->fr.max_y - ctx->fr.min_y) * -0.1;;
 		fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
 	}
 	else if (keysym == XK_Right)
 	{
-		ctx->fr.shift_x += -0.1;
+		ctx->fr.shift_x += (ctx->fr.max_y - ctx->fr.min_y) * 0.1;;
 		fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
 	}
 	else if (keysym == XK_l)
@@ -160,29 +203,29 @@ int	color(int keysym, t_ctx *ctx)
 	return 0;
 }
 
-int motions(int keysym, t_ctx *ctx)
-{
-	size_t	i;
+// int motions(int keysym, t_ctx *ctx)
+// {
+// 	size_t	i;
 
-	i = 0;
-	printf("The %d key has been pressed\n\n", keysym);
-	if (keysym == Button4)
-	{
-		ctx->fr.color_min = 0x006600;
-		ctx->fr.color_max = 0x339933;
-		fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
-	}
-	else if (keysym == Button5)
-	{
-		ctx->fr.color_min = 0x301860;
-		ctx->fr.color_max = 0x602080;
-		fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
-	}
+// 	i = 0;
+// 	printf("The %d key has been pressed\n\n", keysym);
+// 	if (keysym == Button4)
+// 	{
+// 		ctx->fr.color_min = 0x006600;
+// 		ctx->fr.color_max = 0x339933;
+// 		fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
+// 	}
+// 	else if (keysym == Button5)
+// 	{
+// 		ctx->fr.color_min = 0x301860;
+// 		ctx->fr.color_max = 0x602080;
+// 		fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
+// 	}
 			
-	mlx_put_image_to_window(ctx->vars.mlx_ptr, ctx->vars.win_ptr, 
-							ctx->vars.img.img_ptr, 0, 0);
-	return 0;
-}
+// 	mlx_put_image_to_window(ctx->vars.mlx_ptr, ctx->vars.win_ptr, 
+// 							ctx->vars.img.img_ptr, 0, 0);
+// 	return 0;
+// }
 
 
 
@@ -253,23 +296,35 @@ int	main(int argc, char **argv)
 	t_ctx		ctx;
 
 	if (argc < 2)
-	return (ft_printf(
+		return (ft_printf(
 		"fractol: usage: Please enter:\n\t\"%s mandelbrot\" or\n"
 		"\t\"%s julia <float_1> <float_2>\"\n", argv[0], argv[0]), 0);
-		if (argc == 2 && !ft_strncmp(argv[1], "mandelbrot", 10))
-		{
-			// TODO
+	ctx.fr.name = argv[1];
+	if (argc == 2 && !ft_strncmp(ctx.fr.name, "mandelbrot", 10))
+	{
+		// TODO
 		if (image_init(&ctx.vars, argv, &ctx.fr, &ctx.map))
 			return (1);
 		init_pix_coord(&ctx.fr, &ctx.map);
 		fractal_render(&ctx.fr, &ctx.map, &ctx.vars);
-		mlx_hook(ctx.vars.win_ptr, KeyPress, KeyPressMask, color, &ctx.vars);
+		mlx_hook(ctx.vars.win_ptr, KeyPress, KeyPressMask, &color, &ctx.vars);
 		mlx_hook(ctx.vars.win_ptr, ButtonPress, ButtonPressMask, &button_press, &ctx);
-		// mlx_mouse_hook(ctx.vars.win_ptr, motions, &ctx.vars);
 		mlx_hook(ctx.vars.win_ptr, DestroyNotify, 0, &cleanup, &ctx.vars);
 		mlx_loop(ctx.vars.mlx_ptr);
 		ft_printf("mandelbrot\n");
 		return (0);
+	}
+	else if (argc == 2 && !ft_strncmp(ctx.fr.name, "newton", 6))
+	{
+		if (image_init(&ctx.vars, argv, &ctx.fr, &ctx.map))
+			return (1);
+		init_pix_coord(&ctx.fr, &ctx.map);
+		newton_render(&ctx.fr, &ctx.map, &ctx.vars);
+		mlx_hook(ctx.vars.win_ptr, KeyPress, KeyPressMask, color, &ctx.vars);
+		mlx_hook(ctx.vars.win_ptr, ButtonPress, ButtonPressMask, &button_press, &ctx);
+		mlx_hook(ctx.vars.win_ptr, DestroyNotify, 0, &cleanup, &ctx.vars);
+		mlx_loop(ctx.vars.mlx_ptr);
+		ft_printf("newton\n");
 	}
 	data = parse_controller(argc, argv);
 	if (!data)
@@ -280,12 +335,20 @@ int	main(int argc, char **argv)
 		free(data);
 		return (write(2, "Error\n", 6), 1);
 	}
-	else if (data->len == 2 && !ft_strncmp(argv[1], "julia", 5))
+	else if (data->len == 2 && !ft_strncmp(ctx.fr.name, "julia", 5))
 	{
 		// TODO
 		if (image_init(&ctx.vars, argv, &ctx.fr, &ctx.map))
  			return (1);
 		ft_printf("julia\n");
+		init_pix_coord(&ctx.fr, &ctx.map);
+		ctx.fr.julia_x = data->intarr[0];
+		ctx.fr.julia_y = data->intarr[1];
+		fractal_render(&ctx.fr, &ctx.map, &ctx.vars);
+		mlx_hook(ctx.vars.win_ptr, KeyPress, KeyPressMask, color, &ctx.vars);
+		mlx_hook(ctx.vars.win_ptr, ButtonPress, ButtonPressMask, &button_press, &ctx);
+		mlx_hook(ctx.vars.win_ptr, DestroyNotify, 0, &cleanup, &ctx.vars);
+		mlx_loop(ctx.vars.mlx_ptr);
 		printf("%f %f\n", data->intarr[0], data->intarr[1]);
 	}
 	else
@@ -295,4 +358,5 @@ int	main(int argc, char **argv)
 			"fractol: usage: Please enter:\n\t\"%s mandelbrot\" or\n"
 			"\t\"%s julia <float_1> <float_2>\"\n", argv[0], argv[0]), 0);
 	}
+	clean_parser(&data);
 }

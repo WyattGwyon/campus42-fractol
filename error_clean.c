@@ -20,16 +20,29 @@ void	malloc_error(void)
 
 int cleanup(void *param)
 {
-	t_vars *vars= (t_vars *)param;
-	if (vars->img.img_ptr)
-		mlx_destroy_image(vars->mlx_ptr, vars->img.img_ptr);
-	if (vars->win_ptr)
-		mlx_destroy_window(vars->mlx_ptr, vars->win_ptr);
-	if (vars->mlx_ptr)
-		mlx_destroy_display(vars->mlx_ptr);
-	if (vars->mlx_ptr)
-		free(vars->mlx_ptr); 
-	exit(0);
+    t_vars *vars;
+	
+	vars = (t_vars *)param;
+    if (vars->img.img_ptr)
+    {
+        mlx_destroy_image(vars->mlx_ptr, vars->img.img_ptr);
+        vars->img.img_ptr = NULL;
+    }
+
+    if (vars->win_ptr)
+    {
+        mlx_destroy_window(vars->mlx_ptr, vars->win_ptr);
+        vars->win_ptr = NULL;
+    }
+
+    if (vars->mlx_ptr)
+    {
+        mlx_destroy_display(vars->mlx_ptr);
+        free(vars->mlx_ptr);
+        vars->mlx_ptr = NULL;
+    }
+
+    exit(0);
 }
 
 void	clean_parser(t_parser **p)

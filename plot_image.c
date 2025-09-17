@@ -26,6 +26,20 @@ void	put_pixel(t_img *img, int x, int y, int color)
 	*((unsigned int *)(offset + img->pixel_data_addr)) = color;
 }
 
+void	mandel_or_julia(t_complex *z, t_complex *c, t_graph *fr)
+{
+	if (!ft_strncmp(fr->name, "julia", 5))
+	{
+		c->real = fr->julia_x;
+		c->i = fr->julia_y;
+	}
+	else
+	{
+		c->real = z->real;
+		c->i = z->i;
+	}
+}
+
 void	handle_pixel(int x, int y, t_img *img, t_graph *fr)
 {
 	t_complex	z;
@@ -33,10 +47,9 @@ void	handle_pixel(int x, int y, t_img *img, t_graph *fr)
 	int			i;
 	
 	i = 0;
-	z.real = 0.0;
-	z.i = 0.0;
-	c.real = map(x, fr->min_x, fr->max_x, WIDTH) + fr->shift_x;
-	c.i = map(y, fr->min_y, fr->max_y, HEIGHT) + fr->shift_y; // TODO height should have the same scale
+	z.real = map(x, fr->min_x, fr->max_x, WIDTH) + fr->shift_x;
+	z.i = map(y, fr->min_y, fr->max_y, HEIGHT) + fr->shift_y; // TODO height should have the same scale
+	mandel_or_julia(&z, &c, fr);
 	while (i < fr->iterations)
 	{
 		z = sum_complex(square_complex(z), c);
@@ -71,11 +84,34 @@ void	fractal_render(t_graph *fr, t_pixel *map, t_vars *vars)
 	}
 	mlx_put_image_to_window(vars->mlx_ptr, vars->win_ptr, 
 		temp.img_ptr, 0, 0);
-	mlx_destroy_image(vars->mlx_ptr, vars->img.img_ptr);
+	if (vars->img.img_ptr)
+        mlx_destroy_image(vars->mlx_ptr, vars->img.img_ptr);
 	vars->img = temp;
 };
 
+void	newton_render(t_graph *fr, t_pixel *map, t_vars *vars)
+{
+	t_img	temp;
 
+	temp.img_ptr = mlx_new_image(vars->mlx_ptr, WIDTH, HEIGHT);
+	temp.pixel_data_addr = mlx_get_data_addr(temp.img_ptr, &temp.bits_per_pixel,
+				&temp.line_len, &temp.endian);
+	map->y_pix = 0;
+	while (map->y_pix < HEIGHT)
+	{
+		map->x_pix = 0;
+		while (map->x_pix < WIDTH)
+		{
+			handle_pixel_newton(map->x_pix, map->y_pix, &temp, fr);
+			map->x_pix++;
+		}
+		map->y_pix++;
+	}
+	mlx_put_image_to_window(vars->mlx_ptr, vars->win_ptr, 
+		temp.img_ptr, 0, 0);
+	mlx_destroy_image(vars->mlx_ptr, vars->img.img_ptr);
+	vars->img = temp;
+};
 
 
 
