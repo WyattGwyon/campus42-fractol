@@ -113,9 +113,6 @@ void	newton_render(t_graph *fr, t_pixel *map, t_vars *vars)
 	vars->img = temp;
 };
 
-
-
-
 void	set_xy_axis(t_graph *fr, t_vars *vars)
 {
 	for (int i = 0; i < WIDTH; ++i)
@@ -142,7 +139,6 @@ void	zoom(t_pixel *map)
 	printf("zoom in on pixel (%f,%f)\n", map->x_pix, map->y_pix);
 	
 }
-
 
 void	plot_image(t_graph *fr, t_pixel *map, t_vars *vars)
 {

@@ -51,6 +51,7 @@ int main(void)
     char *sf3 = "\n\n\n  -46\b9 \n5d6";
     char *sf4 = "\t\n\r\v\f  469.0304567890 \n";
 	char *sf5 = "1.234e18";
+	char *sf6 = "-0.0001889e3";
 
     printf("ft_atof: %f\n", ft_atof(sf0));
     printf("atof:    %f\n\n", atof(sf0));
@@ -69,6 +70,9 @@ int main(void)
 
 	printf("ft_atof: %f\n", ft_atof(sf5));
     printf("atof:    %f\n\n", atof(sf5));
+
+	printf("ft_atof: %f\n", ft_atof(sf6));
+    printf("atof:    %f\n\n", atof(sf6));
 
 	printf("=========== {ft_atof} TEST FINISH =========\n");
 	

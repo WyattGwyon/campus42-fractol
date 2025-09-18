@@ -101,6 +101,44 @@ static const t_color_map color_table[] = {
     {XK_0, 0xffffff, 0x77ff77},
 };
 
+typedef int (*t_event)(t_ctx *ctx);
+
+typedef struct s_event_map
+{
+	int key;
+	t_event event;
+}	t_event_map;
+
+static const t_event_map event_table[] = {
+	{XK_Up, move_up},
+	{XK_Down, move_down},
+	{XK_Left, move_left},
+	{XK_Right, move_right},
+	{XK_l, iter_down},
+	{XK_h, iter_up},
+	{XK_r, reset},
+};
+
+static const t_event_map key_table[] = {
+	{XK_1, color_wrapper},
+    {XK_2, color_wrapper},
+    {XK_3, color_wrapper},
+    {XK_4, color_wrapper},
+    {XK_5, color_wrapper},
+    {XK_6, color_wrapper},
+    {XK_7, color_wrapper},
+    {XK_8, color_wrapper},
+    {XK_9, color_wrapper},
+    {XK_0, color_wrapper},
+	{XK_Up, shift_iterate_wrapper},
+	{XK_Down, shift_iterate_wrapper},
+	{XK_Left, shift_iterate_wrapper},
+	{XK_Right, shift_iterate_wrapper},
+	{XK_l, shift_iterate_wrapper},
+	{XK_h, shift_iterate_wrapper},
+	{XK_r, shift_iterate_wrapper},
+};
+
 typedef struct s_parser
 {
 	char	**strarr;
@@ -216,5 +254,16 @@ int			color(int keysym, t_ctx *ctx);
 int			motions(int keysym, t_ctx *ctx);
 void		handle_pixel_newton(int x, int y, t_img *img, t_graph *fr);
 void		newton_render(t_graph *fr, t_pixel *map, t_vars *vars);
+int			key_handler(int keysym, t_ctx *ctx);
+void		move_left(t_ctx *ctx);
+void		move_right(t_ctx *ctx);
+void		move_up(t_ctx *ctx);
+void		move_down(t_ctx *ctx);
+void		iter_up(t_ctx *ctx);
+void		iter_down(t_ctx *ctx);
+void		reset(t_ctx *ctx);
+int			shift_iterate(int keysym, t_ctx *ctx);
+int 		color_wrapper(int keysym, t_ctx *ctx);
+int 		shift_iterate_wrapper(int keysym, t_ctx *ctx);
 
 #endif
