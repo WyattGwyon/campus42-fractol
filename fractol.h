@@ -28,117 +28,6 @@
 # define WIDTH 						800
 # define HEIGHT 					600
 
-#define BLACK 0x000000
-#define WHITE 0xFFFFFF
-#define RED   0xFF0000
-#define GREEN 0x00FF00
-#define BLUE  0x0000FF
-
-#define OCEAN_1 0x001f3f
-#define OCEAN_2 0x0074D9
-#define OCEAN_3 0x7FDBFF
-#define OCEAN_4 0x39CCCC
-#define OCEAN_5 0x3D9970
-
-#define FIRE_1 0x7f0000
-#define FIRE_2 0xff0000
-#define FIRE_3 0xff7f00
-#define FIRE_4 0xffff00
-#define FIRE_5 0xffffff
-
-#define SPACE_1 0x0b0033
-#define SPACE_2 0x301860
-#define SPACE_3 0x602080
-#define SPACE_4 0xa040a0
-#define SPACE_5 0xff80c0
-
-#define FOREST_1 0x003300
-#define FOREST_2 0x006600
-#define FOREST_3 0x339933
-#define FOREST_4 0x66cc66
-#define FOREST_5 0xccffcc
-
-#define RAINBOW_1 0xff0000
-#define RAINBOW_2 0xff7f00
-#define RAINBOW_3 0xffff00
-#define RAINBOW_4 0x00ff00
-#define RAINBOW_5 0x0000ff
-
-// typedef void  (*t_operation)(t_map *map, t_fract *fr);
-
-// typedef enum
-// {
-//     OP_ZOOM,
-//     OP_SHIFT_HORZ,
-//     OP_SHIFT_VERT,
-//     OP_COUNT
-// } t_op_type;
-
-// t_operation operations[OP_COUNT] =
-// {
-// 	zoom,
-// 	horizontal_shift,
-// 	vertical_shift
-// };
-
-typedef struct s_color_map
-{
-	int	key;
-	int	color_min;
-	int color_max;
-} t_color_map;
-
-static const t_color_map color_table[] = {
-    {XK_1, 0x00ff00, 0x000000},
-    {XK_2, 0x0000ff, 0x000000},
-    {XK_3, 0xff0000, 0xfff900},
-    {XK_4, 0xff7f00, 0xffffff},
-    {XK_5, 0xffff00, 0xff0000},
-    {XK_6, 0x556699, 0x009999},
-    {XK_7, 0xff0000, 0xff00ff},
-    {XK_8, 0x001f3f, 0x0074D9},
-    {XK_9, 0x886666, 0x000000},
-    {XK_0, 0xffffff, 0x77ff77},
-};
-
-typedef int (*t_event)(t_ctx *ctx);
-
-typedef struct s_event_map
-{
-	int key;
-	t_event event;
-}	t_event_map;
-
-static const t_event_map event_table[] = {
-	{XK_Up, move_up},
-	{XK_Down, move_down},
-	{XK_Left, move_left},
-	{XK_Right, move_right},
-	{XK_l, iter_down},
-	{XK_h, iter_up},
-	{XK_r, reset},
-};
-
-static const t_event_map key_table[] = {
-	{XK_1, color_wrapper},
-    {XK_2, color_wrapper},
-    {XK_3, color_wrapper},
-    {XK_4, color_wrapper},
-    {XK_5, color_wrapper},
-    {XK_6, color_wrapper},
-    {XK_7, color_wrapper},
-    {XK_8, color_wrapper},
-    {XK_9, color_wrapper},
-    {XK_0, color_wrapper},
-	{XK_Up, shift_iterate_wrapper},
-	{XK_Down, shift_iterate_wrapper},
-	{XK_Left, shift_iterate_wrapper},
-	{XK_Right, shift_iterate_wrapper},
-	{XK_l, shift_iterate_wrapper},
-	{XK_h, shift_iterate_wrapper},
-	{XK_r, shift_iterate_wrapper},
-};
-
 typedef struct s_parser
 {
 	char	**strarr;
@@ -150,8 +39,8 @@ typedef struct s_parser
 
 typedef struct s_complex
 {
-	double real;
-	double i;
+	double	real;
+	double	i;
 }	t_complex;
 
 typedef struct s_newton
@@ -184,7 +73,7 @@ typedef struct s_graph
 	int		iterations;
 	double	julia_x;
 	double	julia_y;
-}   t_graph;
+}	t_graph;
 
 typedef struct s_pixel
 {
@@ -195,7 +84,7 @@ typedef struct s_pixel
 	double	y_pix;
 	int		x_foc;
 	int		y_foc;
-}  t_pixel;
+}	t_pixel;
 
 typedef struct s_img
 {
@@ -204,14 +93,14 @@ typedef struct s_img
 	int		bits_per_pixel;
 	int		endian;
 	int		line_len;
-}				t_img;
+}	t_img;
 
 typedef struct s_vars
 {
-    void	*mlx_ptr;
-    void	*win_ptr;
+	void	*mlx_ptr;
+	void	*win_ptr;
 	t_img	img;
-}               t_vars;
+}	t_vars;
 
 typedef struct s_ctx
 {
@@ -219,6 +108,142 @@ typedef struct s_ctx
 	t_pixel	map;
 	t_graph	fr;
 }	t_ctx;
+
+typedef int	(*t_event)(t_ctx *ctx);
+
+typedef struct s_event_map
+{
+	int		key;
+	t_event	event;
+}	t_event_map;
+
+typedef int	(*t_wrapper)(int keysym, t_ctx *ctx);
+
+typedef struct s_wrapper_map
+{
+	int			key;
+	t_wrapper	wrapper;
+}	t_wrapper_map;
+
+int			move_left(t_ctx *ctx);
+int			move_right(t_ctx *ctx);
+int			move_up(t_ctx *ctx);
+int			move_down(t_ctx *ctx);
+int			iter_up(t_ctx *ctx);
+int			iter_down(t_ctx *ctx);
+int			reset(t_ctx *ctx);
+int			color(int keysym, t_ctx *ctx);
+int			shift_iterate(int keysym, t_ctx *ctx);
+int			color_wrapper(int keysym, t_ctx *ctx);
+int			shift_iterate_wrapper(int keysym, t_ctx *ctx);
+int			wrapper_handler(int keysym, t_ctx *ctx);
+int			button_press(int button, int x, int y, t_ctx *ctx);
+
+typedef struct s_color_map
+{
+	int	key;
+	int	color_min;
+	int	color_max;
+}	t_color_map;
+
+static inline const t_color_map	*gcolor_table(void)
+{
+	static const t_color_map	color_table[] = {
+	{XK_1, 0x00ff00, 0x000000},
+	{XK_2, 0x0000ff, 0x000000},
+	{XK_3, 0xff0000, 0xfff900},
+	{XK_4, 0xff7f00, 0xffffff},
+	{XK_5, 0xffff00, 0xff0000},
+	{XK_6, 0x556699, 0x009999},
+	{XK_7, 0xff0000, 0xff00ff},
+	{XK_8, 0x001f3f, 0x0074D9},
+	{XK_9, 0x886666, 0x000000},
+	{XK_0, 0xffffff, 0x77ff77},
+	{XK_d, 0xf00000, 0x00000f},
+	{0, 0, 0}
+	};
+
+	return (color_table);
+}
+
+static inline const t_color_map	*gctable(void)
+{
+	static const t_color_map	*retrieve_ctable = NULL;
+
+	if (!retrieve_ctable)
+		retrieve_ctable = gcolor_table();
+	return (retrieve_ctable);
+}
+
+// static inline const t_color_map *gctable(void)
+// {
+//     static const t_color_map *retrieve_ctable = NULL;
+
+//     if (!retrieve_ctable)
+//         retrieve_ctable = gcolor_table();
+
+//     return (retrieve_ctable);
+// }
+
+static inline const t_event_map	*gevent_table(void)
+{
+	static const t_event_map	event_table[] = { 
+	{XK_Up, move_up},
+	{XK_Down, move_down},
+	{XK_Left, move_left},
+	{XK_Right, move_right},
+	{XK_l, iter_down},
+	{XK_h, iter_up},
+	{XK_r, reset},
+	{0, NULL}
+	};
+
+	return (event_table);
+}
+
+static inline const t_event_map	*getable(void)
+{
+	static const t_event_map	*retrieve_etable = NULL;
+
+	if (!retrieve_etable)
+		retrieve_etable = gevent_table();
+	return (retrieve_etable);
+}
+
+static inline const t_wrapper_map	*gwrapper_table(void)
+{
+	static const t_wrapper_map	wrapper_table[] = {
+	{XK_1, color_wrapper},
+	{XK_2, color_wrapper},
+	{XK_3, color_wrapper},
+	{XK_4, color_wrapper},
+	{XK_5, color_wrapper},
+	{XK_6, color_wrapper},
+	{XK_7, color_wrapper},
+	{XK_8, color_wrapper},
+	{XK_9, color_wrapper},
+	{XK_0, color_wrapper},
+	{XK_Up, shift_iterate_wrapper},
+	{XK_Down, shift_iterate_wrapper},
+	{XK_Left, shift_iterate_wrapper},
+	{XK_Right, shift_iterate_wrapper},
+	{XK_l, shift_iterate_wrapper},
+	{XK_h, shift_iterate_wrapper},
+	{XK_r, shift_iterate_wrapper},
+	{0, NULL}
+	};
+
+	return (wrapper_table);
+}
+
+static inline const t_wrapper_map	*gwtable(void)
+{
+	static const t_wrapper_map	*retrieve_wtable = NULL;
+
+	if (!retrieve_wtable)
+		retrieve_wtable = gwrapper_table();
+	return (retrieve_wtable);
+}
 
 // libft
 int			ft_printf(const char *fmt, ...);
@@ -232,7 +257,7 @@ void		ft_floatarr_free(double **arr);
 
 // error & cleanup
 void		clean_parser(t_parser **p);
-int 		cleanup(void *param);
+int			cleanup(void *param);
 void		malloc_error(void);
 
 // init
@@ -244,26 +269,23 @@ double		mandel(double x);
 void		put_pixel(t_img *img, int x, int y, int color);
 void		set_xy_axis(t_graph *fr, t_vars *vars);
 t_parser	*parse_controller(int argc, char *argv[]);
-double		map(double unscaled_num, double new_min, double new_max, double old_max);
+double		map(double unscaled_num, double new_min, double new_max,
+				double old_max);
 t_complex	sum_complex(t_complex z1, t_complex z2);
 t_complex	square_complex(t_complex z);
 void		fractal_render(t_graph *fr, t_pixel *map, t_vars *vars);
 void		init_pix_coord(t_graph *fr, t_pixel *map);
-int			motions(int keysym, t_ctx *ctx);
-int			color(int keysym, t_ctx *ctx);
-int			motions(int keysym, t_ctx *ctx);
 void		handle_pixel_newton(int x, int y, t_img *img, t_graph *fr);
 void		newton_render(t_graph *fr, t_pixel *map, t_vars *vars);
-int			key_handler(int keysym, t_ctx *ctx);
-void		move_left(t_ctx *ctx);
-void		move_right(t_ctx *ctx);
-void		move_up(t_ctx *ctx);
-void		move_down(t_ctx *ctx);
-void		iter_up(t_ctx *ctx);
-void		iter_down(t_ctx *ctx);
-void		reset(t_ctx *ctx);
-int			shift_iterate(int keysym, t_ctx *ctx);
-int 		color_wrapper(int keysym, t_ctx *ctx);
-int 		shift_iterate_wrapper(int keysym, t_ctx *ctx);
+
+t_complex	sum_complex(t_complex z1, t_complex z2);
+t_complex	square_complex(t_complex z);
+t_complex	multiply_complex(t_complex a, t_complex b);
+t_complex	divide_complex(t_complex a, t_complex b);
+
+t_complex	newton(t_complex z);
+void		newton_zoom_in(t_graph *fr, double factor, int px, int py);
+int			newton_event(int button, int x, int y, t_ctx *ctx);
+void		handle_pixel_newton(int x, int y, t_img *img, t_graph *fr);
 
 #endif

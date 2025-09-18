@@ -27,10 +27,13 @@ SRCS 	=	main.c \
 			error_clean.c \
 			plot_image.c \
 			mandel.c \
-			events.c \
+			event_wrappers.c \
+			event_shift.c \
+			event_zoom.c \
 			math_utils.c \
 			mandel.c \
-			init.c
+			init.c \
+			newton.c
 
 
 OBJS	=	$(SRCS:%.c=%.o)

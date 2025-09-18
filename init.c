@@ -24,8 +24,8 @@ void	init_pix_coord(t_graph *fr, t_pixel *map)
 	fr->y_coord = 0;
 	fr->escape_value = 5;
 	fr->iterations = 42;
-	fr->color_max = BLACK;
-	fr->color_min = WHITE;
+	fr->color_max = 0x000000;
+	fr->color_min = 0xffffff;
 	fr->shift_x = 0;
 	fr->shift_y = 0;
 	fr->max_x = 1.5;
@@ -33,7 +33,7 @@ void	init_pix_coord(t_graph *fr, t_pixel *map)
 	fr->max_y = 1.5;
 	fr->min_y = -1.5;
 	fr->zoom = 1.0;
-};
+}
 
 void	init_vars(t_vars *vars)
 {
@@ -53,7 +53,7 @@ int	image_init(t_vars *vars, char **argv, t_graph *fr, t_pixel *map)
 	if (!vars->win_ptr)
 	{
 		mlx_destroy_display(vars->mlx_ptr);
-		free(vars->mlx_ptr); 
+		free(vars->mlx_ptr);
 		malloc_error();
 	}
 	vars->img.img_ptr = mlx_new_image(vars->mlx_ptr, WIDTH, HEIGHT);
@@ -61,7 +61,7 @@ int	image_init(t_vars *vars, char **argv, t_graph *fr, t_pixel *map)
 	{
 		mlx_destroy_window(vars->mlx_ptr, vars->win_ptr);
 		mlx_destroy_display(vars->mlx_ptr);
-		free(vars->mlx_ptr); 
+		free(vars->mlx_ptr);
 		malloc_error();
 	}
 	vars->img.pixel_data_addr = mlx_get_data_addr(vars->img.img_ptr, \
