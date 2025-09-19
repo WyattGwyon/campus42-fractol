@@ -49,3 +49,8 @@ t_complex	divide_complex(t_complex a, t_complex b)
 	result.i = (a.real * b.i) - (a.i * b.real) / denom;
 	return (result);
 }
+
+double	map(double unscaled_num, double new_min, double new_max, double old_max)
+{
+	return (((new_max - new_min) * (unscaled_num / old_max)) + new_min);
+}

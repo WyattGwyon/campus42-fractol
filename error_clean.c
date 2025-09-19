@@ -18,6 +18,14 @@ void	malloc_error(void)
 	exit(EXIT_FAILURE);
 }
 
+void	usage_error(char *argv[])
+{
+	ft_printf(
+		"fractol: usage: Please enter:\n\t\"%s mandelbrot\" or\n"
+		"\t\"%s julia <float_1> <float_2>\"\n", argv[0], argv[0]);
+	exit(EXIT_FAILURE);
+}
+
 int	cleanup(void *param)
 {
 	t_vars	*vars;
@@ -40,13 +48,4 @@ int	cleanup(void *param)
 		vars->mlx_ptr = NULL;
 	}
 	exit(0);
-}
-
-void	clean_parser(t_parser **p)
-{
-	if ((*p)->strarr)
-		ft_strarr_free(&(*p)->strarr);
-	if ((*p)->intarr)
-		ft_floatarr_free(&(*p)->intarr);
-	ft_struct_free((void **)p);
 }

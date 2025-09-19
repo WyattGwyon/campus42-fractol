@@ -31,9 +31,9 @@ SRCS 	=	main.c \
 			event_shift.c \
 			event_zoom.c \
 			math_utils.c \
-			mandel.c \
+			newton.c \
 			init.c \
-			newton.c
+			tables.c
 
 
 OBJS	=	$(SRCS:%.c=%.o)

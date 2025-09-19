@@ -35,14 +35,14 @@ int	move_right(t_ctx *ctx)
 
 int	move_up(t_ctx *ctx)
 {
-	ctx->fr.shift_y += (ctx->fr.max_y - ctx->fr.min_y) * 0.1;
+	ctx->fr.shift_y += (ctx->fr.max_y - ctx->fr.min_y) * -0.1;
 	fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
 	return (0);
 }
 
 int	move_down(t_ctx *ctx)
 {
-	ctx->fr.shift_y += (ctx->fr.max_y - ctx->fr.min_y) * -0.1;
+	ctx->fr.shift_y += (ctx->fr.max_y - ctx->fr.min_y) * 0.1;
 	fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
 	return (0);
 }

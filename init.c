@@ -69,3 +69,20 @@ int	image_init(t_vars *vars, char **argv, t_graph *fr, t_pixel *map)
 	init_pix_coord(fr, map);
 	return (0);
 }
+
+void	init_tables(t_ctx *ctx)
+{
+	ctx->color = make_color_table();
+	ctx->event = make_event_table();
+	ctx->wrapper = make_wrapper_table();
+}
+
+void	init_julia(t_ctx *ctx, char *argv[])
+{
+	ctx->fr.julia_x = ft_atof(argv[2]);
+	ctx->fr.julia_y = ft_atof(argv[3]);
+	ctx->fr.max_x = 2;
+	ctx->fr.min_x = -2;
+	ctx->fr.max_y = 2;
+	ctx->fr.min_y = -2;
+}

@@ -14,16 +14,15 @@
 
 int	color(int keysym, t_ctx *ctx)
 {
-	const t_color_map	*color_table = gctable();
-	size_t				i;
+	size_t	i;
 
 	i = 0;
-	while (color_table[i].key != 0)
+	while (ctx->color[i].key != 0)
 	{
-		if (keysym == color_table[i].key)
+		if (keysym == ctx->color[i].key)
 		{
-			ctx->fr.color_min = color_table[i].color_min;
-			ctx->fr.color_max = color_table[i].color_max;
+			ctx->fr.color_min = ctx->color[i].color_min;
+			ctx->fr.color_max = ctx->color[i].color_max;
 			fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
 			break ;
 		}
@@ -34,15 +33,14 @@ int	color(int keysym, t_ctx *ctx)
 
 int	shift_iterate(int keysym, t_ctx *ctx)
 {
-	const t_event_map	*event_table = getable();
-	size_t				i;
+	size_t	i;
 
 	i = 0;
-	while (event_table[i].event != NULL)
+	while (ctx->event[i].event != NULL)
 	{
-		if (keysym == event_table[i].key)
+		if (keysym == ctx->event[i].key)
 		{
-			event_table[i].event(ctx);
+			ctx->event[i].event(ctx);
 			fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
 			break ;
 		}
@@ -63,8 +61,7 @@ int	shift_iterate_wrapper(int keysym, t_ctx *ctx)
 
 int	wrapper_handler(int keysym, t_ctx *ctx)
 {
-	const t_wrapper_map	*wrapper_table = gwtable();
-	size_t				i;
+	size_t	i;
 
 	i = 0;
 	if (keysym == XK_Escape)
@@ -72,11 +69,11 @@ int	wrapper_handler(int keysym, t_ctx *ctx)
 		ft_printf("The %d key (ESC) has been pressed\n\n", keysym);
 		cleanup((void *)&ctx->vars);
 	}
-	while (wrapper_table[i].wrapper != NULL)
+	while (ctx->wrapper[i].wrapper != NULL)
 	{
-		if (keysym == wrapper_table[i].key)
+		if (keysym == ctx->wrapper[i].key)
 		{
-			wrapper_table[i].wrapper(keysym, ctx);
+			ctx->wrapper[i].wrapper(keysym, ctx);
 			break ;
 		}
 		i++;

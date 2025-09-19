@@ -12,17 +12,11 @@
 
 #include "fractol.h"
 
-double	map(double unscaled_num, double new_min, double new_max, double old_max)
-{
-	return (((new_max - new_min) * (unscaled_num / old_max)) + new_min); 
-}
-
 void	put_pixel(t_img *img, int x, int y, int color)
 {
 	int	offset;
 
-	offset = (img->line_len * y) + (x * (img->bits_per_pixel / 8));	
-
+	offset = (img->line_len * y) + (x * (img->bits_per_pixel / 8));
 	*((unsigned int *)(offset + img->pixel_data_addr)) = color;
 }
 
@@ -38,6 +32,36 @@ void	mandel_or_julia(t_complex *z, t_complex *c, t_graph *fr)
 		c->real = z->real;
 		c->i = z->i;
 	}
+	return ;
+}
+
+void	calculate_fractol(t_graph *fr, t_complex *z, t_complex *c)
+{
+	t_complex	tmp;
+
+	if (!ft_strncmp(fr->name, "mandelbrot", 10) || \
+		!ft_strncmp(fr->name, "julia", 5))
+		*z = sum_complex(square_complex(*z), *c);
+	else if (!ft_strncmp(fr->name, "burningship", 11))
+	{
+		tmp.real = fabs(z->real);
+		tmp.i = fabs(z->i);
+		*z = sum_complex(square_complex(tmp), *c);
+	}
+	else if (!ft_strncmp(fr->name, "celtic", 6))
+	{
+		tmp.real = z->real * z->real - z->i * z->i;
+		tmp.i = 2 * z->real * z->i;
+		z->real = fabs(tmp.real) + c->real;
+		z->i = tmp.i + c->i;
+	}
+	else if (!ft_strncmp(fr->name, "tricorn", 7))
+	{
+		tmp.real = z->real * z->real - z->i * z->i + c->real;
+		tmp.i = -2 * z->real * z->i + c->i;
+		z->real = tmp.real;
+		z->i = tmp.i;
+	}
 }
 
 void	handle_pixel(int x, int y, t_img *img, t_graph *fr)
@@ -45,14 +69,14 @@ void	handle_pixel(int x, int y, t_img *img, t_graph *fr)
 	t_complex	z;
 	t_complex	c;
 	int			i;
-	
+
 	i = 0;
 	z.real = map(x, fr->min_x, fr->max_x, WIDTH) + fr->shift_x;
-	z.i = map(y, fr->min_y, fr->max_y, HEIGHT) + fr->shift_y; // TODO height should have the same scale
+	z.i = map(y, fr->min_y, fr->max_y, HEIGHT) + fr->shift_y;
 	mandel_or_julia(&z, &c, fr);
 	while (i < fr->iterations)
 	{
-		z = sum_complex(square_complex(z), c);
+		calculate_fractol(fr, &z, &c);
 		if ((z.real * z.real) + (z.i * z.i) > fr->escape_value)
 		{
 			fr->color = map(i, fr->color_max, fr->color_min, fr->iterations);
@@ -70,7 +94,7 @@ void	fractal_render(t_graph *fr, t_pixel *map, t_vars *vars)
 
 	temp.img_ptr = mlx_new_image(vars->mlx_ptr, WIDTH, HEIGHT);
 	temp.pixel_data_addr = mlx_get_data_addr(temp.img_ptr, &temp.bits_per_pixel,
-				&temp.line_len, &temp.endian);
+			&temp.line_len, &temp.endian);
 	map->y_pix = 0;
 	while (map->y_pix < HEIGHT)
 	{
@@ -82,9 +106,9 @@ void	fractal_render(t_graph *fr, t_pixel *map, t_vars *vars)
 		}
 		map->y_pix++;
 	}
-	mlx_put_image_to_window(vars->mlx_ptr, vars->win_ptr, 
+	mlx_put_image_to_window(vars->mlx_ptr, vars->win_ptr,
 		temp.img_ptr, 0, 0);
 	if (vars->img.img_ptr)
-        mlx_destroy_image(vars->mlx_ptr, vars->img.img_ptr);
+		mlx_destroy_image(vars->mlx_ptr, vars->img.img_ptr);
 	vars->img = temp;
-};
+}
