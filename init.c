@@ -81,7 +81,7 @@ void	init_tables(t_ctx *ctx)
 void	init_julia(t_ctx *ctx, char *argv[])
 {
 	double	x;
-	double 	y;
+	double	y;
 
 	x = ft_atof(argv[2]);
 	y = ft_atof(argv[3]);
@@ -90,7 +90,6 @@ void	init_julia(t_ctx *ctx, char *argv[])
 		ft_putendl_fd("Must provide coordinates closer to zero", 2);
 		return (cleanup(&ctx->vars), 0);
 	}
-
 	ctx->fr.julia_x = ft_atof(argv[2]);
 	ctx->fr.julia_y = ft_atof(argv[3]);
 	ctx->fr.max_x = 2;
