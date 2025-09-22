@@ -77,6 +77,7 @@ void	init_tables(t_ctx *ctx)
 	ctx->wrapper = make_wrapper_table();
 }
 
+// ft_printf("x_julia = %f y_julia = %f\n", ctx->fr.julia_x, ctx->fr.julia_y);
 void	init_julia(t_ctx *ctx, char *argv[])
 {
 	ctx->fr.julia_x = ft_atof(argv[2]);

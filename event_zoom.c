@@ -68,26 +68,56 @@ int	mouse_events(int button, int x, int y, t_ctx *ctx)
 {
 	if (button == 1)
 	{
-		ft_printf("Left mouse button pressed at (%d, %d)!\n", x, y);
+		ft_printf("Left mouse button pressed at (%d, %d)\n", x, y);
 	}
 	else if (button == 3)
 	{
-		ft_printf("Right mouse button pressed at (%d, %d)!\n", x, y);
+		ft_printf("Right mouse button pressed at (%d, %d)\n", x, y);
 	}
 	else if (button == 4)
 	{
 		ctx->fr.iterations += 4;
 		zoom_in(ctx, 0.40, x, y);
-		ft_printf("x_max = %f x_min = %f\n", ctx->fr.max_x, ctx->fr.min_x);
-		ft_printf("Zoom in scroll at (%d, %d)!\n", x, y);
+		ft_printf("Zoom in scroll at (%d, %d)\n", x, y);
+		ft_printf("Iterations set to %d\n", ctx->fr.iterations);
 		fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
 	}
 	else if (button == 5)
 	{
 		ctx->fr.iterations -= 2;
 		zoom_out(ctx, 0.20, x, y);
-		ft_printf("Zoom out scroll at (%d, %d)!\n", x, y);
+		ft_printf("Zoom out scroll at (%d, %d)\n", x, y);
+		ft_printf("Iterations set to %d\n", ctx->fr.iterations);
 		fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
 	}
 	return (0);
 }
+
+// int	mouse_events(int button, int x, int y, t_ctx *ctx)
+// {
+// 	if (button == 1)
+// 	{
+// 		ft_printf("Left mouse button pressed at (%d, %d)\n", x, y);
+// 	}
+// 	else if (button == 3)
+// 	{
+// 		ft_printf("Right mouse button pressed at (%d, %d)\n", x, y);
+// 	}
+// 	else if (button == 4)
+// 	{
+// 		ctx->fr.iterations += 4;
+// 		zoom_in(ctx, 0.40, 400, 300);
+// 		ft_printf("Zoom in scroll at (%d, %d)\n", x, y);
+// 		ft_printf("Iterations set to %d\n", ctx->fr.iterations);
+// 		fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
+// 	}
+// 	else if (button == 5)
+// 	{
+// 		ctx->fr.iterations -= 2;
+// 		zoom_out(ctx, 0.20, 400, 300);
+// 		ft_printf("Zoom out scroll at (%d, %d)\n", x, y);
+// 		ft_printf("Iterations set to %d\n", ctx->fr.iterations);
+// 		fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
+// 	}
+// 	return (0);
+// }

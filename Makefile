@@ -6,7 +6,7 @@
 #    By: clouden <clouden@student.42madrid.com      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/03 16:20:41 by clouden           #+#    #+#              #
-#    Updated: 2025/09/03 16:20:45 by clouden          ###   ########.fr        #
+#    Updated: 2025/09/22 13:32:22 by clouden          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,12 +26,10 @@ NAME	=	fractol
 SRCS 	=	main.c \
 			error_clean.c \
 			plot_image.c \
-			mandel.c \
 			event_wrappers.c \
 			event_shift.c \
 			event_zoom.c \
 			math_utils.c \
-			newton.c \
 			init.c \
 			tables.c
 

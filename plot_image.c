@@ -112,3 +112,20 @@ void	fractal_render(t_graph *fr, t_pixel *map, t_vars *vars)
 		mlx_destroy_image(vars->mlx_ptr, vars->img.img_ptr);
 	vars->img = temp;
 }
+
+// void	fractal_render(t_graph *fr, t_pixel *map, t_vars *vars)
+// {
+// 	map->y_pix = 0;
+// 	while (map->y_pix < HEIGHT)
+// 	{
+// 		map->x_pix = 0;
+// 		while (map->x_pix < WIDTH)
+// 		{
+// 			handle_pixel(map->x_pix, map->y_pix, &vars->img, fr);
+// 			map->x_pix++;
+// 		}
+// 		map->y_pix++;
+// 	}
+// 	mlx_put_image_to_window(vars->mlx_ptr, vars->win_ptr,
+// 		vars->img.img_ptr, 0, 0);
+// }
