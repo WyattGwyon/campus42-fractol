@@ -31,19 +31,3 @@ void	*ft_calloc(size_t count, size_t size)
 	}
 	return (mem);
 }
-/*
-#include <stdio.h>
-#include <string.h>
-
-int main(void)
-{
-    size_t count = 3;
-    size_t size = 4;
-    void *ft_mem = ft_calloc(count, size);
-    void *mem = calloc(count, size);
-
-    printf("ft_calloc: %p, %zu\n", ft_mem, sizeof(ft_mem));
-    printf("calloc: %p, %zu\n", mem, sizeof(mem));
-    return (0);
-}
-*/

@@ -44,4 +44,6 @@ int	main(int argc, char **argv)
 		mlx_hook(ctx.vars.win_ptr, DestroyNotify, 0, &cleanup, &ctx.vars);
 		mlx_loop(ctx.vars.mlx_ptr);
 	}
+	else
+		return (usage_error(argv), 0);
 }
