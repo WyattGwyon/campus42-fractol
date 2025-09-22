@@ -22,6 +22,7 @@ CFLAGS 	= 	-Wall -Wextra -Werror -I./libft -I./minilibx -g3
 LIBMLX	=	./minilibx-linux
 LIBMLXA =	./minilibx-linux/libmlx.a
 NAME	=	fractol
+BN_NAME =	fractol_bonus
 
 SRCS 	=	main.c \
 			error_clean.c \
@@ -33,8 +34,20 @@ SRCS 	=	main.c \
 			init.c \
 			tables.c
 
+BN_SRCS 	=	main.c \
+			error_clean.c \
+			plot_image.c \
+			event_wrappers.c \
+			event_shift.c \
+			event_zoom_bonus.c \
+			math_utils.c \
+			init.c \
+			tables.c
+
 
 OBJS	=	$(SRCS:%.c=%.o)
+
+BN_OBJS	=	$(BN_SRCS:%.c=%.o)
 
 LIBFT_DIR	=	libft/
 LIBFT		=	$(LIBFT_DIR)libft.a
@@ -43,6 +56,12 @@ all:$(NAME)
 
 $(NAME):$(OBJS) $(LIBFT)
 	@echo "$(BLUE)[FRACTOL]$(RESET) $< → $@"
+	@$(CC) $(CFLAGS) $^ $(LIBMLXA) -o $@ -lX11 -lXext -lm
+
+bonus:$(BN_NAME) 
+
+$(BN_NAME):$(BN_OBJS) $(LIBFT)
+	@echo "$(BLUE)[BONUS_FRACTOL]$(RESET) $< → $@"
 	@$(CC) $(CFLAGS) $^ $(LIBMLXA) -o $@ -lX11 -lXext -lm
 
 $(LIBMLXA) : $(LIBMLX)
@@ -60,7 +79,7 @@ clean:
 	@echo "+---------------------------+"
 	@echo "|  🧹  CLEANING OBJECTS     |"
 	@echo "+---------------------------+"
-	@rm -rf *.o $(OBJS)
+	@rm -rf *.o $(OBJS) $(BN_OBJS)
 	@$(MAKE) -C $(LIBFT_DIR) clean --no-print-directory
 
 fclean: clean
@@ -68,7 +87,7 @@ fclean: clean
 	@echo "+---------------------------+"
 	@echo "|  🔥 REMOVING EXECUTABLES  |"
 	@echo "+---------------------------+"
-	@rm -f $(NAME)
+	@rm -f $(NAME) $(BN_NAME)
 	@$(MAKE) -C $(LIBFT_DIR) fclean --no-print-directory
 	@echo "$(RESET)"
 	@echo "...now THAT'S effin' clean!\n"
