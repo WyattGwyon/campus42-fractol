@@ -77,15 +77,15 @@ $(LIBFT):
 clean:
 	@echo "$(YELLOW)"
 	@echo "+---------------------------+"
-	@echo "|  🧹  CLEANING OBJECTS     |"
+	@echo "|      CLEANING OBJECTS     |"
 	@echo "+---------------------------+"
 	@rm -rf *.o $(OBJS) $(BN_OBJS)
 	@$(MAKE) -C $(LIBFT_DIR) clean --no-print-directory
 
 fclean: clean
-	@echo "$(RED)"
+	@echo "$(YELLOW)"
 	@echo "+---------------------------+"
-	@echo "|  🔥 REMOVING EXECUTABLES  |"
+	@echo "|   REMOVING EXECUTABLES    |"
 	@echo "+---------------------------+"
 	@rm -f $(NAME) $(BN_NAME)
 	@$(MAKE) -C $(LIBFT_DIR) fclean --no-print-directory

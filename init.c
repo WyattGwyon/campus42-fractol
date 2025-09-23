@@ -88,7 +88,8 @@ void	init_julia(t_ctx *ctx, char *argv[])
 	if (x > 1.5 || x < -2.5 || y > 1.5 || y < -1.5)
 	{
 		ft_putendl_fd("Must provide coordinates closer to zero", 2);
-		return (cleanup(&ctx->vars), 0);
+		cleanup(&ctx->vars);
+		exit(EXIT_FAILURE);
 	}
 	ctx->fr.julia_x = ft_atof(argv[2]);
 	ctx->fr.julia_y = ft_atof(argv[3]);

@@ -14,12 +14,20 @@
 
 void	enter_the_fractol(t_ctx *ctx, char *argv[])
 {
-	if (image_init(&ctx->vars, argv, &ctx->fr, &ctx->map))
-		exit (EXIT_FAILURE);
-	init_pix_coord(&ctx->fr, &ctx->map);
-	init_tables(ctx);
 	if (!ft_strncmp(ctx->fr.name, "julia", 5))
+	{
+		init_pix_coord(&ctx->fr, &ctx->map);
 		init_julia(ctx, argv);
+		if (image_init(&ctx->vars, argv, &ctx->fr, &ctx->map))
+			exit (EXIT_FAILURE);
+	}
+	else
+	{
+		if (image_init(&ctx->vars, argv, &ctx->fr, &ctx->map))
+			exit (EXIT_FAILURE);
+		init_pix_coord(&ctx->fr, &ctx->map);
+	}
+	init_tables(ctx);
 	fractal_render(&ctx->fr, &ctx->map, &ctx->vars);
 }
 
@@ -27,6 +35,7 @@ int	main(int argc, char **argv)
 {
 	t_ctx		ctx;
 
+	ft_bzero(&ctx, sizeof(ctx));
 	if (argc < 2)
 		return (usage_error(argv), 0);
 	ctx.fr.name = argv[1];
